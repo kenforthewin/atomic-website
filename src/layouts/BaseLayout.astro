@@ -1,0 +1,96 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A personal knowledge base that turns freeform notes into a semantically-connected, AI-augmented knowledge graph.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-bg-primary text-text-primary font-body antialiased">
+    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-bg-primary/80 border-b border-border-light">
+      <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-3 group">
+          <img src="/favicon.ico" alt="Atomic" class="w-7 h-7" />
+          <span class="font-display text-xl tracking-tight">Atomic</span>
+        </a>
+        <div class="flex items-center gap-8">
+          <a href="/getting-started/" class="text-sm text-text-secondary hover:text-text-primary transition-colors">Docs</a>
+          <a href="/blog" class="text-sm text-text-secondary hover:text-text-primary transition-colors">Blog</a>
+          <a href="/api/explorer" class="text-sm text-text-secondary hover:text-text-primary transition-colors">API</a>
+          <a
+            href="https://github.com/kenforthewin/atomic"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm text-text-secondary hover:text-text-primary transition-colors"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://github.com/kenforthewin/atomic/releases/latest"
+            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-accent hover:bg-accent-dark rounded-lg transition-colors"
+          >
+            Download
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="pt-16">
+      <slot />
+    </main>
+
+    <footer class="border-t border-border-light bg-bg-secondary">
+      <div class="max-w-6xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <img src="/favicon.ico" alt="Atomic" class="w-5 h-5" />
+              <span class="font-display text-lg">Atomic</span>
+            </div>
+            <p class="text-sm text-text-muted leading-relaxed">
+              Your ideas, semantically connected.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium mb-3">Product</h4>
+            <ul class="space-y-2 text-sm text-text-muted">
+              <li><a href="https://github.com/kenforthewin/atomic/releases/latest" class="hover:text-text-primary transition-colors">Download</a></li>
+              <li><a href="/getting-started/self-hosting/" class="hover:text-text-primary transition-colors">Self-Host</a></li>
+              <li><a href="/guides/ios-app/" class="hover:text-text-primary transition-colors">iOS App</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium mb-3">Resources</h4>
+            <ul class="space-y-2 text-sm text-text-muted">
+              <li><a href="/getting-started/" class="hover:text-text-primary transition-colors">Documentation</a></li>
+              <li><a href="/api/explorer" class="hover:text-text-primary transition-colors">API Reference</a></li>
+              <li><a href="/blog" class="hover:text-text-primary transition-colors">Blog</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium mb-3">Community</h4>
+            <ul class="space-y-2 text-sm text-text-muted">
+              <li><a href="https://github.com/kenforthewin/atomic" class="hover:text-text-primary transition-colors">GitHub</a></li>
+              <li><a href="https://github.com/kenforthewin/atomic/issues" class="hover:text-text-primary transition-colors">Issues</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-10 pt-6 border-t border-border-light text-sm text-text-muted">
+          &copy; {new Date().getFullYear()} Atomic
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

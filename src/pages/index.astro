@@ -1,0 +1,306 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Atomic — Your Ideas, Semantically Connected">
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <!-- Subtle grid background -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 1px 1px, #1a1a1a 1px, transparent 0); background-size: 32px 32px;"></div>
+
+    <!-- Decorative nodes -->
+    <div class="absolute top-32 left-[10%] w-2 h-2 rounded-full bg-accent/20 animate-pulse"></div>
+    <div class="absolute top-48 left-[15%] w-1.5 h-1.5 rounded-full bg-accent/15 animate-pulse" style="animation-delay: 0.5s;"></div>
+    <div class="absolute top-24 right-[12%] w-2.5 h-2.5 rounded-full bg-accent/20 animate-pulse" style="animation-delay: 1s;"></div>
+    <div class="absolute top-56 right-[18%] w-1.5 h-1.5 rounded-full bg-accent/10 animate-pulse" style="animation-delay: 1.5s;"></div>
+
+    <!-- Connecting lines (SVG) -->
+    <svg class="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="10%" y1="20%" x2="15%" y2="35%" stroke="#7c3aed" stroke-width="1" />
+      <line x1="85%" y1="15%" x2="82%" y2="38%" stroke="#7c3aed" stroke-width="1" />
+      <line x1="15%" y1="35%" x2="30%" y2="25%" stroke="#7c3aed" stroke-width="0.5" />
+      <line x1="82%" y1="38%" x2="70%" y2="28%" stroke="#7c3aed" stroke-width="0.5" />
+    </svg>
+
+    <div class="max-w-6xl mx-auto px-6 pt-24 pb-16 md:pt-32 md:pb-24 relative">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 mb-8 text-xs font-medium tracking-wide uppercase text-accent bg-accent-subtle rounded-full border border-accent/10">
+          <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+          v1.2.4 — Desktop, Server &amp; iOS
+        </div>
+
+        <h1 class="font-display text-5xl md:text-7xl leading-[1.05] tracking-tight mb-6">
+          Your ideas,<br />
+          <span class="italic text-accent">semantically</span> connected
+        </h1>
+
+        <p class="text-lg md:text-xl text-text-secondary leading-relaxed max-w-2xl mx-auto mb-10">
+          Atomic is a personal knowledge base that turns freeform markdown notes into an
+          AI-augmented knowledge graph — with semantic search, wiki synthesis, and agentic chat.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href="https://github.com/kenforthewin/atomic/releases/latest"
+            class="group inline-flex items-center gap-3 px-7 py-3.5 text-base font-medium text-white bg-accent hover:bg-accent-dark rounded-xl transition-all hover:shadow-lg hover:shadow-accent/20"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download for Mac
+          </a>
+          <a
+            href="/getting-started/"
+            class="inline-flex items-center gap-2 px-7 py-3.5 text-base font-medium text-text-primary bg-bg-white border border-border rounded-xl hover:border-accent/30 hover:bg-accent-subtle/50 transition-all"
+          >
+            Read the docs
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+        <p class="mt-4 text-xs text-text-muted">
+          Also available as a <a href="/getting-started//self-hosting" class="underline underline-offset-2 hover:text-text-secondary transition-colors">self-hosted server</a> or <a href="/guides/ios-app/" class="underline underline-offset-2 hover:text-text-secondary transition-colors">iOS app</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshot showcase -->
+  <section class="relative pb-16 md:pb-24">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10 border border-border/50 ring-1 ring-black/5">
+        <img
+          src="/images/screenshots/canvas.png"
+          alt="Atomic canvas view — spatial visualization of connected atoms"
+          class="w-full"
+          loading="eager"
+        />
+        <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features grid -->
+  <section class="py-20 md:py-28 bg-bg-secondary">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">
+          Not just notes — a <span class="italic">knowledge graph</span>
+        </h2>
+        <p class="text-text-secondary text-lg max-w-2xl mx-auto">
+          Every note you write is automatically embedded, chunked, tagged, and linked to related ideas. Your knowledge base gets smarter as it grows.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="group p-6 bg-bg-white rounded-xl border border-border-light hover:border-accent/20 transition-all hover:shadow-md">
+          <div class="w-10 h-10 rounded-lg bg-accent-subtle flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </div>
+          <h3 class="font-medium text-lg mb-2">Semantic Search</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Find ideas by meaning, not just keywords. Vector embeddings let you search across your entire knowledge base by concept.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="group p-6 bg-bg-white rounded-xl border border-border-light hover:border-accent/20 transition-all hover:shadow-md">
+          <div class="w-10 h-10 rounded-lg bg-accent-subtle flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+            </svg>
+          </div>
+          <h3 class="font-medium text-lg mb-2">Wiki Synthesis</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            LLM-generated wiki articles synthesize everything under a tag, with inline citations linking back to your original notes.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="group p-6 bg-bg-white rounded-xl border border-border-light hover:border-accent/20 transition-all hover:shadow-md">
+          <div class="w-10 h-10 rounded-lg bg-accent-subtle flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+            </svg>
+          </div>
+          <h3 class="font-medium text-lg mb-2">Agentic Chat</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Converse with your knowledge base. The AI agent searches your notes during conversation, scoped to specific tags or your entire collection.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="group p-6 bg-bg-white rounded-xl border border-border-light hover:border-accent/20 transition-all hover:shadow-md">
+          <div class="w-10 h-10 rounded-lg bg-accent-subtle flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+          </div>
+          <h3 class="font-medium text-lg mb-2">Spatial Canvas</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Visualize your knowledge as a force-directed graph. Semantically related atoms cluster together. Zoom, pan, and explore the topology of your ideas.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="group p-6 bg-bg-white rounded-xl border border-border-light hover:border-accent/20 transition-all hover:shadow-md">
+          <div class="w-10 h-10 rounded-lg bg-accent-subtle flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+            </svg>
+          </div>
+          <h3 class="font-medium text-lg mb-2">Auto-Tagging</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            LLM-powered tag extraction automatically categorizes your notes into a hierarchical tree — topics, people, locations, organizations, and events.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="group p-6 bg-bg-white rounded-xl border border-border-light hover:border-accent/20 transition-all hover:shadow-md">
+          <div class="w-10 h-10 rounded-lg bg-accent-subtle flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+            </svg>
+          </div>
+          <h3 class="font-medium text-lg mb-2">MCP Integration</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Connect your knowledge base to Claude and other AI assistants via the Model Context Protocol. Your notes become context for any conversation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshot pair: wiki + chat -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+          <span class="text-xs font-medium tracking-wide uppercase text-accent mb-3 block">Wiki Synthesis</span>
+          <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">
+            Your notes, <span class="italic">synthesized</span>
+          </h2>
+          <p class="text-text-secondary leading-relaxed mb-6">
+            Atomic generates wiki articles from your notes under each tag. Every claim is backed by inline citations
+            linking to the original source atom. Articles update incrementally as you add new notes.
+          </p>
+          <a href="/concepts/wiki-synthesis/" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors">
+            Learn more
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+        <div class="rounded-xl overflow-hidden shadow-xl shadow-black/8 border border-border/50 ring-1 ring-black/5">
+          <img src="/images/screenshots/wiki.png" alt="Wiki synthesis view" class="w-full" loading="lazy" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="order-2 lg:order-1 rounded-xl overflow-hidden shadow-xl shadow-black/8 border border-border/50 ring-1 ring-black/5">
+          <img src="/images/screenshots/chat.png" alt="Agentic chat view" class="w-full" loading="lazy" />
+        </div>
+        <div class="order-1 lg:order-2">
+          <span class="text-xs font-medium tracking-wide uppercase text-accent mb-3 block">Agentic RAG</span>
+          <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">
+            Chat with your <span class="italic">knowledge</span>
+          </h2>
+          <p class="text-text-secondary leading-relaxed mb-6">
+            Ask questions and get answers grounded in your notes. The AI agent semantically searches your knowledge base
+            during conversation, scoped to specific tags or across everything.
+          </p>
+          <a href="/concepts/chat/" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors">
+            Learn more
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Runs everywhere -->
+  <section class="py-20 md:py-28 bg-bg-secondary">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">
+        Runs <span class="italic">everywhere</span>
+      </h2>
+      <p class="text-text-secondary text-lg max-w-2xl mx-auto mb-12">
+        Desktop app via Tauri, headless server for self-hosting, iOS app for mobile, browser extension for web clipping, and MCP server for AI integration.
+      </p>
+
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+        {[
+          { label: 'macOS', icon: 'M3 4a1 1 0 011-1h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm4 16h10' },
+          { label: 'Server', icon: 'M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01' },
+          { label: 'iOS', icon: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z' },
+          { label: 'Extension', icon: 'M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z' },
+          { label: 'MCP', icon: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1' },
+        ].map(({ label, icon }) => (
+          <div class="flex flex-col items-center gap-2 p-4">
+            <div class="w-12 h-12 rounded-xl bg-bg-white border border-border-light flex items-center justify-center">
+              <svg class="w-5 h-5 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d={icon} />
+              </svg>
+            </div>
+            <span class="text-sm text-text-secondary">{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="font-display text-3xl md:text-5xl tracking-tight mb-6">
+        Start building your<br /><span class="italic text-accent">knowledge graph</span>
+      </h2>
+      <p class="text-text-secondary text-lg max-w-xl mx-auto mb-8">
+        Open source. Self-hostable. Your data stays yours.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href="https://github.com/kenforthewin/atomic/releases/latest"
+          class="inline-flex items-center gap-3 px-7 py-3.5 text-base font-medium text-white bg-accent hover:bg-accent-dark rounded-xl transition-all hover:shadow-lg hover:shadow-accent/20"
+        >
+          Download Atomic
+        </a>
+        <a
+          href="https://github.com/kenforthewin/atomic"
+          class="inline-flex items-center gap-2 px-7 py-3.5 text-base font-medium text-text-primary bg-bg-white border border-border rounded-xl hover:border-accent/30 transition-all"
+        >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  section:first-of-type > div:last-child > div {
+    animation: fade-in-up 0.8s ease-out;
+  }
+</style>

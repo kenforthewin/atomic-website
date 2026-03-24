@@ -1,0 +1,14 @@
+/* Starlight dark theme overrides to match Atomic's app palette */
+:root {
+  --sl-color-accent-low: #2e1065;
+  --sl-color-accent: #7c3aed;
+  --sl-color-accent-high: #c4b5fd;
+}
+
+[data-theme='dark'] {
+  --sl-color-bg: #1e1e1e;
+  --sl-color-bg-nav: #252525;
+  --sl-color-bg-sidebar: #252525;
+  --sl-color-hairline-light: #2d2d2d;
+  --sl-color-hairline: #3d3d3d;
+}
