@@ -28,7 +28,9 @@ const { title, description = 'A personal knowledge base that turns freeform note
         <a href="/" class="flex items-center group">
           {dark ? <img src="/logo-dark.svg" alt="Atomic" class="h-6" /> : <AnimatedLogo />}
         </a>
-        <div class="flex items-center gap-8">
+
+        <!-- Desktop nav -->
+        <div class="hidden md:flex items-center gap-8">
           <a href="/getting-started/" class:list={['text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>Docs</a>
           <a href="/blog" class:list={['text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>Blog</a>
           <a href="/api/explorer" class:list={['text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>API</a>
@@ -47,8 +49,53 @@ const { title, description = 'A personal knowledge base that turns freeform note
             Download
           </a>
         </div>
+
+        <!-- Mobile hamburger -->
+        <button
+          class="md:hidden p-2 -mr-2"
+          id="mobile-menu-toggle"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+        >
+          <svg class:list={['w-5 h-5', dark ? 'text-gray-400' : 'text-text-secondary']} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path id="hamburger-icon" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile dropdown -->
+      <div class:list={['hidden md:hidden border-t', dark ? 'border-[#2d2d2d] bg-[#252525]' : 'border-border-light bg-bg-primary']} id="mobile-menu">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-3">
+          <a href="/getting-started/" class:list={['text-sm py-1.5 transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>Docs</a>
+          <a href="/blog" class:list={['text-sm py-1.5 transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>Blog</a>
+          <a href="/api/explorer" class:list={['text-sm py-1.5 transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>API</a>
+          <a
+            href="https://github.com/kenforthewin/atomic"
+            target="_blank"
+            rel="noopener noreferrer"
+            class:list={['text-sm py-1.5 transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}
+          >
+            GitHub
+          </a>
+          <a
+            href="https://github.com/kenforthewin/atomic/releases/latest"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 mt-1 text-sm font-medium text-white bg-accent hover:bg-accent-dark rounded-lg transition-colors"
+          >
+            Download
+          </a>
+        </div>
       </div>
     </nav>
+
+    <script>
+      const toggle = document.getElementById('mobile-menu-toggle');
+      const menu = document.getElementById('mobile-menu');
+      toggle?.addEventListener('click', () => {
+        const open = !menu?.classList.contains('hidden');
+        menu?.classList.toggle('hidden');
+        toggle.setAttribute('aria-expanded', String(!open));
+      });
+    </script>
 
     <main class="pt-16">
       <slot />
