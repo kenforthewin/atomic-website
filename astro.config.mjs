@@ -10,7 +10,9 @@ export default defineConfig({
     starlight({
       title: 'Atomic',
       logo: {
-        src: './src/assets/icon.png',
+        light: './src/assets/logo.svg',
+        dark: './src/assets/logo-dark.svg',
+        replacesTitle: true,
       },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/kenforthewin/atomic' },
@@ -68,5 +70,8 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: true,
+    },
   },
 });

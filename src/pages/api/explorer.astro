@@ -1,21 +1,28 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ApiExplorer from '../../components/ApiExplorer.tsx';
 ---
 
-<BaseLayout title="API Explorer — Atomic">
-  <div class="max-w-6xl mx-auto px-6 py-16 md:py-24">
-    <div class="mb-8">
-      <h1 class="font-display text-3xl md:text-4xl tracking-tight mb-3">API Explorer</h1>
-      <p class="text-text-secondary">
-        Interactive reference for the Atomic REST API. All endpoints require Bearer token authentication.
-      </p>
-    </div>
-    <div id="api-reference" class="rounded-xl overflow-hidden border border-border-light bg-bg-white min-h-[600px]">
-      <p class="p-8 text-text-muted italic text-center">
-        API explorer will be available once the OpenAPI spec is configured.
-        <br />
-        <a href="/api/overview/" class="text-accent hover:underline">View the API overview</a> in the meantime.
-      </p>
-    </div>
+<BaseLayout title="API Explorer — Atomic" dark>
+  <div class="api-explorer-wrapper">
+    <ApiExplorer client:only="react" />
   </div>
 </BaseLayout>
+
+<style is:global>
+  .api-explorer-wrapper {
+    padding-top: 1rem;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Scalar injects its own layout — constrain it */
+  .scalar-app {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  .scalar-api-reference {
+    max-width: 100vw !important;
+  }
+</style>

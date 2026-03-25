@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -12,6 +12,8 @@
   "dependencies": {
     "@astrojs/react": "^5.0.1",
     "@astrojs/starlight": "^0.38.2",
+    "@scalar/api-reference-react": "^0.9.14",
+    "@scalar/openapi-parser": "^0.25.6",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

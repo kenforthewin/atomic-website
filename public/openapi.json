@@ -1,0 +1,4430 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Atomic API",
+    "description": "REST API for the Atomic knowledge base",
+    "license": {
+      "name": "MIT",
+      "identifier": "MIT"
+    },
+    "version": "1.1.1"
+  },
+  "paths": {
+    "/api/atoms": {
+      "get": {
+        "tags": [
+          "atoms"
+        ],
+        "operationId": "get_atoms",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "query",
+            "description": "Filter by tag ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max results to return (default: 50)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset for pagination",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Cursor for keyset pagination (updated_at value)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor_id",
+            "in": "query",
+            "description": "Cursor tiebreaker (atom id)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "description": "Source filter: \"all\", \"manual\", or \"external\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "source_value",
+            "in": "query",
+            "description": "Filter by specific source domain (e.g. \"nytimes.com\")",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "description": "Sort field: \"updated\", \"created\", \"published\", or \"title\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "description": "Sort direction: \"desc\" or \"asc\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of atoms",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAtoms"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "atoms"
+        ],
+        "operationId": "create_atom",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAtomRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created atom",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AtomWithTags"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/atoms/bulk": {
+      "post": {
+        "tags": [
+          "atoms"
+        ],
+        "operationId": "bulk_create_atoms",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CreateAtomRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Bulk create result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkCreateResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/atoms/sources": {
+      "get": {
+        "tags": [
+          "atoms"
+        ],
+        "operationId": "get_source_list",
+        "responses": {
+          "200": {
+            "description": "List of sources with counts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SourceInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/atoms/{id}": {
+      "get": {
+        "tags": [
+          "atoms"
+        ],
+        "operationId": "get_atom",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Atom ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atom with tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AtomWithTags"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Atom not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "atoms"
+        ],
+        "operationId": "update_atom",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Atom ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAtomRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Updated atom",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AtomWithTags"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Atom not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "atoms"
+        ],
+        "operationId": "delete_atom",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Atom ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atom deleted"
+          },
+          "404": {
+            "description": "Atom not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/atoms/{id}/embedding-status": {
+      "get": {
+        "tags": [
+          "embeddings"
+        ],
+        "operationId": "get_embedding_status",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Atom ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Embedding status"
+          },
+          "404": {
+            "description": "Atom not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/atoms/{id}/similar": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "operationId": "find_similar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Atom ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max results (default: 10)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "threshold",
+            "in": "query",
+            "description": "Minimum similarity threshold (default: 0.7)",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Similar atoms",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SimilarAtomResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/tokens": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "list_tokens",
+        "responses": {
+          "200": {
+            "description": "List of API tokens (metadata only)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiTokenInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "create_token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTokenBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Token created (includes raw token — save it, won't be shown again)"
+          }
+        }
+      }
+    },
+    "/api/auth/tokens/{id}": {
+      "delete": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "revoke_token",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Token ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token revoked"
+          },
+          "404": {
+            "description": "Token not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/canvas/atoms-with-embeddings": {
+      "get": {
+        "tags": [
+          "canvas"
+        ],
+        "operationId": "get_atoms_with_embeddings",
+        "responses": {
+          "200": {
+            "description": "Atoms with embedding vectors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AtomWithEmbedding"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/canvas/level": {
+      "post": {
+        "tags": [
+          "canvas"
+        ],
+        "operationId": "get_canvas_level",
+        "parameters": [
+          {
+            "name": "parent_id",
+            "in": "query",
+            "description": "Parent node ID (null for root level)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CanvasLevelBody"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Canvas level data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CanvasLevel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/canvas/positions": {
+      "get": {
+        "tags": [
+          "canvas"
+        ],
+        "operationId": "get_positions",
+        "responses": {
+          "200": {
+            "description": "All atom positions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AtomPosition"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "canvas"
+        ],
+        "operationId": "save_positions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AtomPosition"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Positions saved"
+          }
+        }
+      }
+    },
+    "/api/clustering": {
+      "get": {
+        "tags": [
+          "clustering"
+        ],
+        "operationId": "get_clusters",
+        "responses": {
+          "200": {
+            "description": "Saved clusters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AtomCluster"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clustering/compute": {
+      "post": {
+        "tags": [
+          "clustering"
+        ],
+        "operationId": "compute_clusters",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComputeClustersBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Computed clusters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AtomCluster"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clustering/connection-counts": {
+      "get": {
+        "tags": [
+          "clustering"
+        ],
+        "operationId": "get_connection_counts",
+        "parameters": [
+          {
+            "name": "min_similarity",
+            "in": "query",
+            "description": "Minimum similarity (default: 0.5)",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connection counts per atom"
+          }
+        }
+      }
+    },
+    "/api/conversations": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "get_conversations",
+        "parameters": [
+          {
+            "name": "filter_tag_id",
+            "in": "query",
+            "description": "Filter by tag ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max results (default: 50)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset for pagination",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of conversations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConversationWithTags"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "create_conversation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateConversationBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created conversation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationWithTags"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/conversations/{id}": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "get_conversation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Conversation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation with messages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationWithMessages"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "update_conversation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Conversation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConversationBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Updated conversation"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "delete_conversation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Conversation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation deleted"
+          }
+        }
+      }
+    },
+    "/api/conversations/{id}/messages": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "send_chat_message",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Conversation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Assistant response (streaming events via WebSocket)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatMessageWithContext"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/conversations/{id}/scope": {
+      "put": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "set_conversation_scope",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Conversation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetScopeBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Scope updated"
+          }
+        }
+      }
+    },
+    "/api/conversations/{id}/scope/tags": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "add_tag_to_scope",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Conversation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTagBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tag added to scope"
+          }
+        }
+      }
+    },
+    "/api/conversations/{id}/scope/tags/{tag_id}": {
+      "delete": {
+        "tags": [
+          "chat"
+        ],
+        "operationId": "remove_tag_from_scope",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Conversation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag removed from scope"
+          }
+        }
+      }
+    },
+    "/api/databases": {
+      "get": {
+        "tags": [
+          "databases"
+        ],
+        "operationId": "list_databases",
+        "responses": {
+          "200": {
+            "description": "List of databases with active ID"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "databases"
+        ],
+        "operationId": "create_database",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDatabaseBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Database created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatabaseInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/databases/{id}": {
+      "put": {
+        "tags": [
+          "databases"
+        ],
+        "operationId": "rename_database",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Database ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenameDatabaseBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Database renamed"
+          },
+          "404": {
+            "description": "Database not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "databases"
+        ],
+        "operationId": "delete_database",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Database ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Database deleted"
+          },
+          "400": {
+            "description": "Cannot delete default database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/databases/{id}/activate": {
+      "put": {
+        "tags": [
+          "databases"
+        ],
+        "operationId": "activate_database",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Database ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Database activated"
+          }
+        }
+      }
+    },
+    "/api/embeddings/process-pending": {
+      "post": {
+        "tags": [
+          "embeddings"
+        ],
+        "operationId": "process_pending_embeddings",
+        "responses": {
+          "200": {
+            "description": "Number of atoms queued for embedding"
+          }
+        }
+      }
+    },
+    "/api/embeddings/process-tagging": {
+      "post": {
+        "tags": [
+          "embeddings"
+        ],
+        "operationId": "process_pending_tagging",
+        "responses": {
+          "200": {
+            "description": "Number of atoms queued for tagging"
+          }
+        }
+      }
+    },
+    "/api/embeddings/reset-stuck": {
+      "post": {
+        "tags": [
+          "embeddings"
+        ],
+        "operationId": "reset_stuck_processing",
+        "responses": {
+          "200": {
+            "description": "Number of stuck atoms reset"
+          }
+        }
+      }
+    },
+    "/api/embeddings/retry/{atom_id}": {
+      "post": {
+        "tags": [
+          "embeddings"
+        ],
+        "operationId": "retry_embedding",
+        "parameters": [
+          {
+            "name": "atom_id",
+            "in": "path",
+            "description": "Atom ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Embedding retried"
+          },
+          "404": {
+            "description": "Atom not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/feeds": {
+      "get": {
+        "tags": [
+          "feeds"
+        ],
+        "operationId": "list_feeds",
+        "responses": {
+          "200": {
+            "description": "All feeds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Feed"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "feeds"
+        ],
+        "operationId": "create_feed",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeedRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Feed created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/feeds/{id}": {
+      "get": {
+        "tags": [
+          "feeds"
+        ],
+        "operationId": "get_feed",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feed ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feed details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feed"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Feed not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "feeds"
+        ],
+        "operationId": "update_feed",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feed ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFeedRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Feed updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feed"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "feeds"
+        ],
+        "operationId": "delete_feed",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feed ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feed deleted"
+          }
+        }
+      }
+    },
+    "/api/feeds/{id}/poll": {
+      "post": {
+        "tags": [
+          "feeds"
+        ],
+        "operationId": "poll_feed",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feed ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Poll results"
+          }
+        }
+      }
+    },
+    "/api/graph/edges": {
+      "get": {
+        "tags": [
+          "graph"
+        ],
+        "operationId": "get_semantic_edges",
+        "parameters": [
+          {
+            "name": "min_similarity",
+            "in": "query",
+            "description": "Minimum similarity score (default: 0.5)",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Semantic edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SemanticEdge"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/graph/neighborhood/{atom_id}": {
+      "get": {
+        "tags": [
+          "graph"
+        ],
+        "operationId": "get_atom_neighborhood",
+        "parameters": [
+          {
+            "name": "atom_id",
+            "in": "path",
+            "description": "Center atom ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "depth",
+            "in": "query",
+            "description": "Graph traversal depth (default: 1)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "min_similarity",
+            "in": "query",
+            "description": "Minimum similarity score (default: 0.5)",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Neighborhood graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeighborhoodGraph"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/graph/rebuild-edges": {
+      "post": {
+        "tags": [
+          "graph"
+        ],
+        "operationId": "rebuild_semantic_edges",
+        "responses": {
+          "200": {
+            "description": "Edges rebuilt"
+          }
+        }
+      }
+    },
+    "/api/import/obsidian": {
+      "post": {
+        "tags": [
+          "import"
+        ],
+        "operationId": "import_obsidian_vault",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportObsidianRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Import result"
+          }
+        }
+      }
+    },
+    "/api/ingest/url": {
+      "post": {
+        "tags": [
+          "ingestion"
+        ],
+        "operationId": "ingest_url",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngestUrlRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ingested atom"
+          }
+        }
+      }
+    },
+    "/api/ingest/urls": {
+      "post": {
+        "tags": [
+          "ingestion"
+        ],
+        "operationId": "ingest_urls",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngestUrlsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Batch ingestion results"
+          }
+        }
+      }
+    },
+    "/api/ollama/embedding-models": {
+      "get": {
+        "tags": [
+          "providers"
+        ],
+        "operationId": "get_ollama_embedding_models",
+        "parameters": [
+          {
+            "name": "host",
+            "in": "query",
+            "description": "Ollama host URL (default: http://127.0.0.1:11434)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ollama embedding models"
+          }
+        }
+      }
+    },
+    "/api/ollama/llm-models": {
+      "get": {
+        "tags": [
+          "providers"
+        ],
+        "operationId": "get_ollama_llm_models",
+        "parameters": [
+          {
+            "name": "host",
+            "in": "query",
+            "description": "Ollama host URL (default: http://127.0.0.1:11434)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ollama LLM models"
+          }
+        }
+      }
+    },
+    "/api/ollama/models": {
+      "get": {
+        "tags": [
+          "providers"
+        ],
+        "operationId": "get_ollama_models",
+        "parameters": [
+          {
+            "name": "host",
+            "in": "query",
+            "description": "Ollama host URL (default: http://127.0.0.1:11434)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All Ollama models"
+          }
+        }
+      }
+    },
+    "/api/ollama/test": {
+      "post": {
+        "tags": [
+          "providers"
+        ],
+        "operationId": "test_ollama",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestOllamaBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Connection test result"
+          }
+        }
+      }
+    },
+    "/api/provider/verify": {
+      "get": {
+        "tags": [
+          "providers"
+        ],
+        "operationId": "verify_provider_configured",
+        "responses": {
+          "200": {
+            "description": "Whether an AI provider is configured"
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "post": {
+        "tags": [
+          "search"
+        ],
+        "operationId": "search",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SemanticSearchResult"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search mode",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/settings": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "operationId": "get_settings",
+        "responses": {
+          "200": {
+            "description": "All settings as key-value map"
+          }
+        }
+      }
+    },
+    "/api/settings/models": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "operationId": "get_available_llm_models",
+        "responses": {
+          "200": {
+            "description": "Available LLM models"
+          }
+        }
+      }
+    },
+    "/api/settings/test-openrouter": {
+      "post": {
+        "tags": [
+          "settings"
+        ],
+        "operationId": "test_openrouter_connection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestOpenRouterBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Connection successful"
+          },
+          "400": {
+            "description": "API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/settings/{key}": {
+      "put": {
+        "tags": [
+          "settings"
+        ],
+        "operationId": "set_setting",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "description": "Setting key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetSettingBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Setting updated"
+          },
+          "400": {
+            "description": "Invalid setting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags": {
+      "get": {
+        "tags": [
+          "tags"
+        ],
+        "operationId": "get_tags",
+        "parameters": [
+          {
+            "name": "min_count",
+            "in": "query",
+            "description": "Minimum atom count to include (default: 2)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hierarchical tag tree",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TagWithCount"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tags"
+        ],
+        "operationId": "create_tag",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTagRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created tag",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags/{id}": {
+      "put": {
+        "tags": [
+          "tags"
+        ],
+        "operationId": "update_tag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTagRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Updated tag",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tag not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tags"
+        ],
+        "operationId": "delete_tag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recursive",
+            "in": "query",
+            "description": "Delete child tags recursively",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag deleted"
+          },
+          "404": {
+            "description": "Tag not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags/{id}/children": {
+      "get": {
+        "tags": [
+          "tags"
+        ],
+        "operationId": "get_tag_children",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Parent tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_count",
+            "in": "query",
+            "description": "Minimum atom count to include (default: 0)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max results (default: 100)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset for pagination",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated tag children",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedTagChildren"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/utils/compact-tags": {
+      "post": {
+        "tags": [
+          "utils"
+        ],
+        "operationId": "compact_tags",
+        "responses": {
+          "200": {
+            "description": "Tag compaction results"
+          }
+        }
+      }
+    },
+    "/api/utils/sqlite-vec": {
+      "get": {
+        "tags": [
+          "utils"
+        ],
+        "operationId": "check_sqlite_vec",
+        "responses": {
+          "200": {
+            "description": "sqlite-vec version"
+          }
+        }
+      }
+    },
+    "/api/wiki": {
+      "get": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "get_all_wiki_articles",
+        "responses": {
+          "200": {
+            "description": "All wiki articles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WikiArticleSummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wiki/recompute-tag-embeddings": {
+      "post": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "recompute_all_tag_embeddings",
+        "responses": {
+          "200": {
+            "description": "Recomputed tag embeddings"
+          }
+        }
+      }
+    },
+    "/api/wiki/suggestions": {
+      "get": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "get_wiki_suggestions",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max suggestions (default: 10)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suggested wiki articles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SuggestedArticle"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wiki/versions/{version_id}": {
+      "get": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "get_wiki_version",
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "description": "Version ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wiki article version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WikiArticleVersion"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wiki/{tag_id}": {
+      "get": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "get_wiki",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wiki article with citations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WikiArticleWithCitations"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No article for tag",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "delete_wiki",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wiki deleted"
+          }
+        }
+      }
+    },
+    "/api/wiki/{tag_id}/generate": {
+      "post": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "generate_wiki",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateWikiBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Generated wiki article",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WikiArticleWithCitations"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wiki/{tag_id}/links": {
+      "get": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "get_wiki_links",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wiki cross-reference links",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WikiLink"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wiki/{tag_id}/related": {
+      "get": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "get_related_tags",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max results (default: 10)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Related tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RelatedTag"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wiki/{tag_id}/status": {
+      "get": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "get_wiki_status",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wiki article status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WikiArticleStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wiki/{tag_id}/update": {
+      "post": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "update_wiki",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateWikiBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Updated wiki article",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WikiArticleWithCitations"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wiki/{tag_id}/versions": {
+      "get": {
+        "tags": [
+          "wiki"
+        ],
+        "operationId": "list_wiki_versions",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Version history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WikiVersionSummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddTagBody": {
+        "type": "object",
+        "required": [
+          "tag_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string",
+            "description": "Tag ID to add to scope"
+          }
+        }
+      },
+      "ApiErrorResponse": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiTokenInfo": {
+        "type": "object",
+        "description": "Token metadata returned to callers (never contains the raw token or hash)",
+        "required": [
+          "id",
+          "name",
+          "token_prefix",
+          "created_at",
+          "is_revoked"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "token_prefix": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "last_used_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_revoked": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Atom": {
+        "type": "object",
+        "required": [
+          "id",
+          "content",
+          "title",
+          "snippet",
+          "created_at",
+          "updated_at",
+          "embedding_status",
+          "tagging_status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "snippet": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "embedding_status": {
+            "type": "string"
+          },
+          "tagging_status": {
+            "type": "string"
+          }
+        }
+      },
+      "AtomCluster": {
+        "type": "object",
+        "description": "Atom cluster assignment",
+        "required": [
+          "cluster_id",
+          "atom_ids",
+          "dominant_tags"
+        ],
+        "properties": {
+          "cluster_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "atom_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dominant_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AtomPosition": {
+        "type": "object",
+        "description": "Position of an atom on the canvas",
+        "required": [
+          "atom_id",
+          "x",
+          "y"
+        ],
+        "properties": {
+          "atom_id": {
+            "type": "string"
+          },
+          "x": {
+            "type": "number",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "AtomSummary": {
+        "type": "object",
+        "description": "Lightweight atom summary for paginated list views (no full content)",
+        "required": [
+          "id",
+          "title",
+          "snippet",
+          "created_at",
+          "updated_at",
+          "embedding_status",
+          "tagging_status",
+          "tags"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "snippet": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "embedding_status": {
+            "type": "string"
+          },
+          "tagging_status": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "AtomWithEmbedding": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AtomWithTags"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "embedding": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        ],
+        "description": "Atom with its average embedding vector for similarity calculations"
+      },
+      "AtomWithTags": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Atom"
+          },
+          {
+            "type": "object",
+            "required": [
+              "tags"
+            ],
+            "properties": {
+              "tags": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "BreadcrumbEntry": {
+        "type": "object",
+        "description": "Entry in the breadcrumb navigation trail",
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "BulkCreateResult": {
+        "type": "object",
+        "description": "Result struct for bulk atom creation",
+        "required": [
+          "atoms",
+          "count",
+          "skipped"
+        ],
+        "properties": {
+          "atoms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AtomWithTags"
+            }
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "skipped": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "CanvasEdge": {
+        "type": "object",
+        "description": "An edge between two nodes at the same level",
+        "required": [
+          "source_id",
+          "target_id",
+          "weight"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string"
+          },
+          "target_id": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "CanvasLevel": {
+        "type": "object",
+        "description": "A single level in the hierarchical canvas, returned by get_canvas_level()",
+        "required": [
+          "breadcrumb",
+          "nodes",
+          "edges"
+        ],
+        "properties": {
+          "parent_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parent_label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "breadcrumb": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BreadcrumbEntry"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CanvasNode"
+            }
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CanvasEdge"
+            }
+          }
+        }
+      },
+      "CanvasLevelBody": {
+        "type": "object",
+        "properties": {
+          "children_hint": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "Hint for which children to include"
+          }
+        }
+      },
+      "CanvasNode": {
+        "type": "object",
+        "description": "A node in the hierarchical canvas view",
+        "required": [
+          "id",
+          "node_type",
+          "label",
+          "atom_count",
+          "children_ids",
+          "dominant_tags"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "node_type": {
+            "$ref": "#/components/schemas/CanvasNodeType"
+          },
+          "label": {
+            "type": "string"
+          },
+          "atom_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "children_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dominant_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "centroid": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        }
+      },
+      "CanvasNodeType": {
+        "type": "string",
+        "description": "Type of node in the hierarchical canvas view",
+        "enum": [
+          "category",
+          "tag",
+          "semantic_cluster",
+          "atom"
+        ]
+      },
+      "ChatCitation": {
+        "type": "object",
+        "description": "Citation in a chat message",
+        "required": [
+          "id",
+          "message_id",
+          "citation_index",
+          "atom_id",
+          "excerpt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string"
+          },
+          "citation_index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "atom_id": {
+            "type": "string"
+          },
+          "chunk_index": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "relevance_score": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "float"
+          }
+        }
+      },
+      "ChatMessage": {
+        "type": "object",
+        "description": "Chat message",
+        "required": [
+          "id",
+          "conversation_id",
+          "role",
+          "content",
+          "created_at",
+          "message_index"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "message_index": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ChatMessageWithContext": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ChatMessage"
+          },
+          {
+            "type": "object",
+            "required": [
+              "tool_calls",
+              "citations"
+            ],
+            "properties": {
+              "tool_calls": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChatToolCall"
+                }
+              },
+              "citations": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChatCitation"
+                }
+              }
+            }
+          }
+        ],
+        "description": "Message with tool calls and citations"
+      },
+      "ChatToolCall": {
+        "type": "object",
+        "description": "Tool call record",
+        "required": [
+          "id",
+          "message_id",
+          "tool_name",
+          "tool_input",
+          "status",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string"
+          },
+          "tool_name": {
+            "type": "string"
+          },
+          "tool_input": {},
+          "tool_output": {},
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "completed_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ComputeClustersBody": {
+        "type": "object",
+        "properties": {
+          "min_similarity": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "float",
+            "description": "Minimum similarity for clustering (default: 0.6)"
+          },
+          "min_cluster_size": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Minimum cluster size (default: 2)"
+          }
+        }
+      },
+      "Conversation": {
+        "type": "object",
+        "description": "Chat conversation",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "is_archived"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "is_archived": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ConversationWithMessages": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Conversation"
+          },
+          {
+            "type": "object",
+            "required": [
+              "tags",
+              "messages"
+            ],
+            "properties": {
+              "tags": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              },
+              "messages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChatMessageWithContext"
+                }
+              }
+            }
+          }
+        ],
+        "description": "Conversation with full message history"
+      },
+      "ConversationWithTags": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Conversation"
+          },
+          {
+            "type": "object",
+            "required": [
+              "tags",
+              "message_count"
+            ],
+            "properties": {
+              "tags": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              },
+              "message_count": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "last_message_preview": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        ],
+        "description": "Conversation with its tag scope and summary info"
+      },
+      "CreateAtomRequest": {
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Markdown content of the atom"
+          },
+          "source_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional source URL"
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional publication date (ISO 8601)"
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tag IDs to assign"
+          }
+        }
+      },
+      "CreateConversationBody": {
+        "type": "object",
+        "properties": {
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tag IDs to scope the conversation"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional conversation title"
+          }
+        }
+      },
+      "CreateDatabaseBody": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name for the new database"
+          }
+        }
+      },
+      "CreateFeedRequest": {
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "poll_interval": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CreateTagRequest": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tag name"
+          },
+          "parent_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Parent tag ID for hierarchy"
+          }
+        }
+      },
+      "CreateTokenBody": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name for the new token"
+          }
+        }
+      },
+      "DatabaseInfo": {
+        "type": "object",
+        "description": "Metadata about a knowledge-base database.",
+        "required": [
+          "id",
+          "name",
+          "is_default",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "is_default": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "last_opened_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Feed": {
+        "type": "object",
+        "required": [
+          "id",
+          "url",
+          "poll_interval",
+          "created_at",
+          "is_paused",
+          "tag_ids"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "site_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "poll_interval": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "last_polled_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "last_error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "is_paused": {
+            "type": "boolean"
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GenerateWikiBody": {
+        "type": "object",
+        "required": [
+          "tag_name"
+        ],
+        "properties": {
+          "tag_name": {
+            "type": "string",
+            "description": "Tag name for the wiki article"
+          }
+        }
+      },
+      "ImportObsidianRequest": {
+        "type": "object",
+        "required": [
+          "vault_path"
+        ],
+        "properties": {
+          "vault_path": {
+            "type": "string",
+            "description": "Path to Obsidian vault directory"
+          },
+          "max_notes": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Max notes to import (all if not set)"
+          }
+        }
+      },
+      "IngestUrlRequest": {
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to ingest"
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tag IDs to assign to ingested atom"
+          },
+          "title_hint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Hint for the article title"
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Publication date override"
+          }
+        }
+      },
+      "IngestUrlsRequest": {
+        "type": "object",
+        "required": [
+          "urls"
+        ],
+        "properties": {
+          "urls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngestUrlRequest"
+            },
+            "description": "List of URLs to ingest"
+          }
+        }
+      },
+      "NeighborhoodAtom": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AtomWithTags"
+          },
+          {
+            "type": "object",
+            "required": [
+              "depth"
+            ],
+            "properties": {
+              "depth": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "description": "Atom in a neighborhood graph with depth info"
+      },
+      "NeighborhoodEdge": {
+        "type": "object",
+        "description": "Edge in a neighborhood graph (combines tag and semantic connections)",
+        "required": [
+          "source_id",
+          "target_id",
+          "edge_type",
+          "strength",
+          "shared_tag_count"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string"
+          },
+          "target_id": {
+            "type": "string"
+          },
+          "edge_type": {
+            "type": "string"
+          },
+          "strength": {
+            "type": "number",
+            "format": "float"
+          },
+          "shared_tag_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "similarity_score": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "float"
+          }
+        }
+      },
+      "NeighborhoodGraph": {
+        "type": "object",
+        "description": "Neighborhood graph for local graph view",
+        "required": [
+          "center_atom_id",
+          "atoms",
+          "edges"
+        ],
+        "properties": {
+          "center_atom_id": {
+            "type": "string"
+          },
+          "atoms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NeighborhoodAtom"
+            }
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NeighborhoodEdge"
+            }
+          }
+        }
+      },
+      "PaginatedAtoms": {
+        "type": "object",
+        "description": "Paginated response for atom list",
+        "required": [
+          "atoms",
+          "total_count",
+          "limit",
+          "offset"
+        ],
+        "properties": {
+          "atoms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AtomSummary"
+            }
+          },
+          "total_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Cursor for keyset pagination: updated_at of the last item"
+          },
+          "next_cursor_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Cursor tiebreaker: id of the last item"
+          }
+        }
+      },
+      "PaginatedTagChildren": {
+        "type": "object",
+        "description": "Paginated response for tag children",
+        "required": [
+          "children",
+          "total"
+        ],
+        "properties": {
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagWithCount"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RelatedTag": {
+        "type": "object",
+        "description": "Tag related to another tag by semantic connectivity",
+        "required": [
+          "tag_id",
+          "tag_name",
+          "score",
+          "shared_atoms",
+          "semantic_edges",
+          "has_article"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "tag_name": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number",
+            "format": "double"
+          },
+          "shared_atoms": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semantic_edges": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "has_article": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RenameDatabaseBody": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "New name for the database"
+          }
+        }
+      },
+      "SearchRequest": {
+        "type": "object",
+        "required": [
+          "query",
+          "mode"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query text"
+          },
+          "mode": {
+            "type": "string",
+            "description": "Search mode: \"keyword\", \"semantic\", or \"hybrid\""
+          },
+          "limit": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "description": "Max results (default: 20)"
+          },
+          "threshold": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "float",
+            "description": "Minimum similarity threshold"
+          }
+        }
+      },
+      "SemanticEdge": {
+        "type": "object",
+        "description": "Pre-computed semantic edge between two atoms",
+        "required": [
+          "id",
+          "source_atom_id",
+          "target_atom_id",
+          "similarity_score",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source_atom_id": {
+            "type": "string"
+          },
+          "target_atom_id": {
+            "type": "string"
+          },
+          "similarity_score": {
+            "type": "number",
+            "format": "float"
+          },
+          "source_chunk_index": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "target_chunk_index": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      },
+      "SemanticSearchResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AtomWithTags"
+          },
+          {
+            "type": "object",
+            "required": [
+              "similarity_score",
+              "matching_chunk_content",
+              "matching_chunk_index"
+            ],
+            "properties": {
+              "similarity_score": {
+                "type": "number",
+                "format": "float"
+              },
+              "matching_chunk_content": {
+                "type": "string"
+              },
+              "matching_chunk_index": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "description": "Result struct for semantic search"
+      },
+      "SendMessageBody": {
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Message content"
+          }
+        }
+      },
+      "SetScopeBody": {
+        "type": "object",
+        "properties": {
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tag IDs for the conversation scope"
+          }
+        }
+      },
+      "SetSettingBody": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Setting value"
+          }
+        }
+      },
+      "SimilarAtomResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AtomWithTags"
+          },
+          {
+            "type": "object",
+            "required": [
+              "similarity_score",
+              "matching_chunk_content",
+              "matching_chunk_index"
+            ],
+            "properties": {
+              "similarity_score": {
+                "type": "number",
+                "format": "float"
+              },
+              "matching_chunk_content": {
+                "type": "string"
+              },
+              "matching_chunk_index": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "description": "Result struct for similar atom search"
+      },
+      "SourceInfo": {
+        "type": "object",
+        "description": "Source with atom count for filter dropdown",
+        "required": [
+          "source",
+          "atom_count"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "atom_count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SuggestedArticle": {
+        "type": "object",
+        "description": "Suggested wiki article for tags that don't have articles yet",
+        "required": [
+          "tag_id",
+          "tag_name",
+          "atom_count",
+          "mention_count",
+          "score"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "tag_name": {
+            "type": "string"
+          },
+          "atom_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mention_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "score": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parent_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      },
+      "TagWithCount": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Tag"
+          },
+          {
+            "type": "object",
+            "required": [
+              "atom_count",
+              "children_total",
+              "children"
+            ],
+            "properties": {
+              "atom_count": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "children_total": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TagWithCount"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "TestOllamaBody": {
+        "type": "object",
+        "required": [
+          "host"
+        ],
+        "properties": {
+          "host": {
+            "type": "string",
+            "description": "Ollama server host URL"
+          }
+        }
+      },
+      "TestOpenRouterBody": {
+        "type": "object",
+        "required": [
+          "api_key"
+        ],
+        "properties": {
+          "api_key": {
+            "type": "string",
+            "description": "OpenRouter API key to test"
+          }
+        }
+      },
+      "UpdateAtomRequest": {
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Updated markdown content"
+          },
+          "source_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Updated source URL"
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Updated publication date"
+          },
+          "tag_ids": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "Updated tag IDs (if provided, replaces all tags)"
+          }
+        }
+      },
+      "UpdateConversationBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Updated title"
+          },
+          "is_archived": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Archive/unarchive"
+          }
+        }
+      },
+      "UpdateFeedRequest": {
+        "type": "object",
+        "properties": {
+          "poll_interval": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "is_paused": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "tag_ids": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UpdateTagRequest": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Updated tag name"
+          },
+          "parent_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Updated parent tag ID"
+          }
+        }
+      },
+      "WikiArticle": {
+        "type": "object",
+        "description": "Wiki article for a tag",
+        "required": [
+          "id",
+          "tag_id",
+          "content",
+          "created_at",
+          "updated_at",
+          "atom_count"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tag_id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "atom_count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "WikiArticleStatus": {
+        "type": "object",
+        "description": "Status of a wiki article for quick checks",
+        "required": [
+          "has_article",
+          "article_atom_count",
+          "current_atom_count",
+          "new_atoms_available"
+        ],
+        "properties": {
+          "has_article": {
+            "type": "boolean"
+          },
+          "article_atom_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "current_atom_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "new_atoms_available": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "WikiArticleSummary": {
+        "type": "object",
+        "description": "Summary of a wiki article for list view (includes tag name)",
+        "required": [
+          "id",
+          "tag_id",
+          "tag_name",
+          "updated_at",
+          "atom_count",
+          "inbound_links"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tag_id": {
+            "type": "string"
+          },
+          "tag_name": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "atom_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inbound_links": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "WikiArticleVersion": {
+        "type": "object",
+        "description": "Archived version of a wiki article",
+        "required": [
+          "id",
+          "tag_id",
+          "content",
+          "citations",
+          "atom_count",
+          "version_number",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tag_id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WikiCitation"
+            }
+          },
+          "atom_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "version_number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      },
+      "WikiArticleWithCitations": {
+        "type": "object",
+        "description": "Wiki article with all its citations",
+        "required": [
+          "article",
+          "citations"
+        ],
+        "properties": {
+          "article": {
+            "$ref": "#/components/schemas/WikiArticle"
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WikiCitation"
+            }
+          }
+        }
+      },
+      "WikiCitation": {
+        "type": "object",
+        "description": "Citation linking article content to source atom/chunk",
+        "required": [
+          "id",
+          "citation_index",
+          "atom_id",
+          "excerpt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "citation_index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "atom_id": {
+            "type": "string"
+          },
+          "chunk_index": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
+          },
+          "excerpt": {
+            "type": "string"
+          }
+        }
+      },
+      "WikiLink": {
+        "type": "object",
+        "description": "Inter-article wiki link (cross-reference between wiki articles)",
+        "required": [
+          "id",
+          "source_article_id",
+          "target_tag_name",
+          "has_article"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source_article_id": {
+            "type": "string"
+          },
+          "target_tag_name": {
+            "type": "string"
+          },
+          "target_tag_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "has_article": {
+            "type": "boolean"
+          }
+        }
+      },
+      "WikiVersionSummary": {
+        "type": "object",
+        "description": "Summary of a wiki article version for list views",
+        "required": [
+          "id",
+          "version_number",
+          "atom_count",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "version_number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "atom_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer_auth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer_auth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "atoms",
+      "description": "Atom CRUD operations"
+    },
+    {
+      "name": "tags",
+      "description": "Tag management"
+    },
+    {
+      "name": "search",
+      "description": "Semantic and keyword search"
+    },
+    {
+      "name": "wiki",
+      "description": "Wiki article generation and management"
+    },
+    {
+      "name": "settings",
+      "description": "Server configuration"
+    },
+    {
+      "name": "embeddings",
+      "description": "Embedding pipeline management"
+    },
+    {
+      "name": "canvas",
+      "description": "Canvas positions and hierarchy"
+    },
+    {
+      "name": "graph",
+      "description": "Semantic graph and edges"
+    },
+    {
+      "name": "clustering",
+      "description": "Atom clustering"
+    },
+    {
+      "name": "chat",
+      "description": "Conversations and chat"
+    },
+    {
+      "name": "providers",
+      "description": "AI provider configuration"
+    },
+    {
+      "name": "utils",
+      "description": "Utility endpoints"
+    },
+    {
+      "name": "auth",
+      "description": "API token management"
+    },
+    {
+      "name": "databases",
+      "description": "Multi-database management"
+    },
+    {
+      "name": "import",
+      "description": "Data import"
+    },
+    {
+      "name": "ingestion",
+      "description": "URL content ingestion"
+    },
+    {
+      "name": "feeds",
+      "description": "RSS/Atom feed management"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local server (replace with your instance URL)"
+    }
+  ]
+}

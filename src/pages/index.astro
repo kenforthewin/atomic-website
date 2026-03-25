@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Atomic — Your Ideas, Semantically Connected">
+<BaseLayout title="Atomic — Everything You Know, Connected">
 
   <!-- Hero -->
   <section class="relative overflow-hidden">
@@ -31,13 +31,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <h1 class="font-display text-5xl md:text-7xl leading-[1.05] tracking-tight mb-6">
-          Your ideas,<br />
-          <span class="italic text-accent">semantically</span> connected
+          Everything you know,<br />
+          <span class="italic text-accent">connected</span>
         </h1>
 
         <p class="text-lg md:text-xl text-text-secondary leading-relaxed max-w-2xl mx-auto mb-10">
-          Atomic is a personal knowledge base that turns freeform markdown notes into an
-          AI-augmented knowledge graph — with semantic search, wiki synthesis, and agentic chat.
+          Atomic collects your notes, articles, and research into an AI-augmented knowledge graph — with semantic search, wiki synthesis, and agentic chat.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -71,14 +70,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <!-- Screenshot showcase -->
   <section class="relative pb-16 md:pb-24">
     <div class="max-w-5xl mx-auto px-6">
-      <div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10 border border-border/50 ring-1 ring-black/5">
+      <div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10">
         <img
           src="/images/screenshots/canvas.png"
           alt="Atomic canvas view — spatial visualization of connected atoms"
           class="w-full"
           loading="eager"
         />
-        <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none"></div>
       </div>
     </div>
   </section>
@@ -88,10 +86,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-16">
         <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">
-          Not just notes — a <span class="italic">knowledge graph</span>
+          Not just a note-taking app — a <span class="italic">knowledge graph</span>
         </h2>
         <p class="text-text-secondary text-lg max-w-2xl mx-auto">
-          Every note you write is automatically embedded, chunked, tagged, and linked to related ideas. Your knowledge base gets smarter as it grows.
+          Notes, articles, web clips, feeds — everything is automatically embedded, tagged, and linked to related ideas. Your knowledge base gets smarter as it grows.
         </p>
       </div>
 
@@ -177,18 +175,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </section>
 
-  <!-- Screenshot pair: wiki + chat -->
+  <!-- Feature screenshots -->
   <section class="py-20 md:py-28">
     <div class="max-w-6xl mx-auto px-6">
+      <!-- Wiki -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
         <div>
           <span class="text-xs font-medium tracking-wide uppercase text-accent mb-3 block">Wiki Synthesis</span>
           <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">
-            Your notes, <span class="italic">synthesized</span>
+            Your knowledge, <span class="italic">synthesized</span>
           </h2>
           <p class="text-text-secondary leading-relaxed mb-6">
-            Atomic generates wiki articles from your notes under each tag. Every claim is backed by inline citations
-            linking to the original source atom. Articles update incrementally as you add new notes.
+            Atomic generates wiki articles from everything under a tag — your notes, saved articles, web clips. Every claim is backed by inline citations linking to the source. Articles update incrementally as you add more.
           </p>
           <a href="/concepts/wiki-synthesis/" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors">
             Learn more
@@ -197,30 +195,52 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </svg>
           </a>
         </div>
-        <div class="rounded-xl overflow-hidden shadow-xl shadow-black/8 border border-border/50 ring-1 ring-black/5">
+        <div class="rounded-xl overflow-hidden shadow-xl shadow-black/8">
           <img src="/images/screenshots/wiki.png" alt="Wiki synthesis view" class="w-full" loading="lazy" />
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div class="order-2 lg:order-1 rounded-xl overflow-hidden shadow-xl shadow-black/8 border border-border/50 ring-1 ring-black/5">
-          <img src="/images/screenshots/chat.png" alt="Agentic chat view" class="w-full" loading="lazy" />
+      <!-- Search -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+        <div class="order-2 lg:order-1 rounded-xl overflow-hidden shadow-xl shadow-black/8">
+          <img src="/images/screenshots/search.png" alt="Semantic search view" class="w-full" loading="lazy" />
         </div>
         <div class="order-1 lg:order-2">
-          <span class="text-xs font-medium tracking-wide uppercase text-accent mb-3 block">Agentic RAG</span>
+          <span class="text-xs font-medium tracking-wide uppercase text-accent mb-3 block">Semantic Search</span>
           <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">
-            Chat with your <span class="italic">knowledge</span>
+            Find by <span class="italic">meaning</span>
           </h2>
           <p class="text-text-secondary leading-relaxed mb-6">
-            Ask questions and get answers grounded in your notes. The AI agent semantically searches your knowledge base
-            during conversation, scoped to specific tags or across everything.
+            Search across everything in your knowledge base by concept, not just keywords. Vector embeddings surface related ideas even when the words don't match.
           </p>
-          <a href="/concepts/chat/" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors">
+          <a href="/concepts/semantic-search/" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors">
             Learn more
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </a>
+        </div>
+      </div>
+
+      <!-- Atom -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-xs font-medium tracking-wide uppercase text-accent mb-3 block">Atoms</span>
+          <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">
+            The building <span class="italic">blocks</span>
+          </h2>
+          <p class="text-text-secondary leading-relaxed mb-6">
+            Every piece of knowledge is an atom — a markdown note, a saved article, a web clip. Write in a full editor, or let Atomic pull content in from URLs, RSS feeds, and browser extensions. Each atom is automatically tagged, embedded, and connected.
+          </p>
+          <a href="/concepts/atoms/" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors">
+            Learn more
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+        <div class="rounded-xl overflow-hidden shadow-xl shadow-black/8">
+          <img src="/images/screenshots/atom.png" alt="Single atom view" class="w-full" loading="lazy" />
         </div>
       </div>
     </div>

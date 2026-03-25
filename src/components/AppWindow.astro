@@ -1,0 +1,71 @@
+---
+interface Props {
+  alt: string;
+  src: string;
+  class?: string;
+}
+
+const { alt, src, class: className = '' } = Astro.props;
+---
+
+<div class:list={['app-window', className]}>
+  <div class="title-bar">
+    <div class="traffic-lights">
+      <span class="dot close"></span>
+      <span class="dot minimize"></span>
+      <span class="dot maximize"></span>
+    </div>
+  </div>
+  <div class="window-content">
+    <img src={src} alt={alt} loading="lazy" />
+  </div>
+</div>
+
+<style>
+  .app-window {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1e1e1e;
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.08);
+  }
+
+  .title-bar {
+    height: 40px;
+    background: #2d2d2d;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-bottom: 1px solid #252525;
+  }
+
+  .traffic-lights {
+    display: flex;
+    gap: 8px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .dot.close {
+    background: #ff5f57;
+  }
+
+  .dot.minimize {
+    background: #febc2e;
+  }
+
+  .dot.maximize {
+    background: #28c840;
+  }
+
+  .window-content img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

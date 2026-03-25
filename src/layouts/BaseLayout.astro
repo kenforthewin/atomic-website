@@ -1,12 +1,14 @@
 ---
 import '../styles/global.css';
+import AnimatedLogo from '../components/AnimatedLogo.astro';
 
 interface Props {
   title: string;
   description?: string;
+  dark?: boolean;
 }
 
-const { title, description = 'A personal knowledge base that turns freeform notes into a semantically-connected, AI-augmented knowledge graph.' } = Astro.props;
+const { title, description = 'A personal knowledge base that turns freeform notes into a semantically-connected, AI-augmented knowledge graph.', dark = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -15,25 +17,26 @@ const { title, description = 'A personal knowledge base that turns freeform note
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
   </head>
-  <body class="bg-bg-primary text-text-primary font-body antialiased">
-    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-bg-primary/80 border-b border-border-light">
+  <body class:list={['font-body antialiased', dark ? 'bg-[#1e1e1e] text-white' : 'bg-bg-primary text-text-primary']}>
+    <nav class:list={['fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b', dark ? 'bg-[#252525]/90 border-[#2d2d2d]' : 'bg-bg-primary/80 border-border-light']}>
       <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-3 group">
-          <img src="/favicon.ico" alt="Atomic" class="w-7 h-7" />
-          <span class="font-display text-xl tracking-tight">Atomic</span>
+        <a href="/" class="flex items-center group">
+          {dark ? <img src="/logo-dark.svg" alt="Atomic" class="h-6" /> : <AnimatedLogo />}
         </a>
         <div class="flex items-center gap-8">
-          <a href="/getting-started/" class="text-sm text-text-secondary hover:text-text-primary transition-colors">Docs</a>
-          <a href="/blog" class="text-sm text-text-secondary hover:text-text-primary transition-colors">Blog</a>
-          <a href="/api/explorer" class="text-sm text-text-secondary hover:text-text-primary transition-colors">API</a>
+          <a href="/getting-started/" class:list={['text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>Docs</a>
+          <a href="/blog" class:list={['text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>Blog</a>
+          <a href="/api/explorer" class:list={['text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}>API</a>
           <a
             href="https://github.com/kenforthewin/atomic"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-sm text-text-secondary hover:text-text-primary transition-colors"
+            class:list={['text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}
           >
             GitHub
           </a>
@@ -55,9 +58,8 @@ const { title, description = 'A personal knowledge base that turns freeform note
       <div class="max-w-6xl mx-auto px-6 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div class="flex items-center gap-2 mb-4">
-              <img src="/favicon.ico" alt="Atomic" class="w-5 h-5" />
-              <span class="font-display text-lg">Atomic</span>
+            <div class="mb-4">
+              <img src="/logo.svg" alt="Atomic" class="h-5" />
             </div>
             <p class="text-sm text-text-muted leading-relaxed">
               Your ideas, semantically connected.
