@@ -1,5 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import canvasImg from '../assets/canvas.png';
+import wikiImg from '../assets/wiki.png';
+import searchImg from '../assets/search.png';
+import atomImg from '../assets/atom.png';
 ---
 
 <BaseLayout title="Atomic — Everything You Know, Connected">
@@ -71,11 +76,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="relative pb-16 md:pb-24">
     <div class="max-w-5xl mx-auto px-6">
       <div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10">
-        <img
-          src="/images/screenshots/canvas.png"
+        <Image
+          src={canvasImg}
           alt="Atomic canvas view — spatial visualization of connected atoms"
           class="w-full"
-          loading="eager"
+          format="webp"
+          quality={85}
         />
       </div>
     </div>
@@ -196,14 +202,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </a>
         </div>
         <div class="rounded-xl overflow-hidden shadow-xl shadow-black/8">
-          <img src="/images/screenshots/wiki.png" alt="Wiki synthesis view" class="w-full" loading="lazy" />
+          <Image src={wikiImg} alt="Wiki synthesis view" class="w-full" format="webp" quality={85} loading="lazy" />
         </div>
       </div>
 
       <!-- Search -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
         <div class="order-2 lg:order-1 rounded-xl overflow-hidden shadow-xl shadow-black/8">
-          <img src="/images/screenshots/search.png" alt="Semantic search view" class="w-full" loading="lazy" />
+          <Image src={searchImg} alt="Semantic search view" class="w-full" format="webp" quality={85} loading="lazy" />
         </div>
         <div class="order-1 lg:order-2">
           <span class="text-xs font-medium tracking-wide uppercase text-accent mb-3 block">Semantic Search</span>
@@ -240,7 +246,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </a>
         </div>
         <div class="rounded-xl overflow-hidden shadow-xl shadow-black/8">
-          <img src="/images/screenshots/atom.png" alt="Single atom view" class="w-full" loading="lazy" />
+          <Image src={atomImg} alt="Single atom view" class="w-full" format="webp" quality={85} loading="lazy" />
         </div>
       </div>
     </div>
