@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy Policy — Atomic" description="Privacy policy for the Atomic app.">
+  <section class="max-w-3xl mx-auto px-6 py-24">
+    <h1 class="text-3xl font-bold mb-2">Privacy Policy</h1>
+    <p class="text-text-secondary mb-12">Last updated: March 29, 2026</p>
+
+    <div class="space-y-8 text-text-secondary leading-relaxed">
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Overview</h2>
+        <p>
+          Atomic is a self-hosted personal knowledge base. The Atomic iOS app is a client that connects to a server you run yourself. We do not operate any cloud services, and we have no access to your data.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Data Collection</h2>
+        <p>
+          Atomic does not collect, transmit, or store any personal data on our servers. All your notes, tags, and settings are stored on your own self-hosted Atomic server. The app communicates exclusively with the server address you configure.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Analytics &amp; Tracking</h2>
+        <p>
+          Atomic does not include any analytics, crash reporting, advertising, or tracking frameworks. No usage data is sent to us or any third party.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Network Access</h2>
+        <p>
+          The app connects to your self-hosted server over your local network or the internet, using the URL and API token you provide. The Share Extension uses this same connection to save web pages you share from Safari or other apps.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Camera Access</h2>
+        <p>
+          The app requests camera access solely to scan QR codes during server setup. Camera data is processed on-device and is never transmitted or stored.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Local Storage</h2>
+        <p>
+          The app stores your server URL and API token on your device to maintain the connection. A local cache of your atoms and tags is kept for offline access. This data never leaves your device except when syncing with your server.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Contact</h2>
+        <p>
+          If you have questions about this privacy policy, please open an issue on <a href="https://github.com/kenforthewin/atomic" class="text-accent hover:underline">GitHub</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
