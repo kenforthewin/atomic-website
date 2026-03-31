@@ -34,9 +34,12 @@
       <line class="anim-line-right" x1="49.9" y1="46.8" x2="81.0" y2="42" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
       <!-- Line: center → bottom-center -->
       <line class="anim-line-down" x1="49.9" y1="46.8" x2="49.9" y2="80.0" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-      <!-- Line: right → bottom-right -->
-      <line class="anim-line-right-down" x1="81.0" y1="42" x2="81.0" y2="78.8" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
     </g>
+
+    <!-- Right → bottom-right line: outside mask to avoid mobile Safari
+         compositing bug with stroke-dasharray + mask. Both endpoints are
+         covered by nodes so no gap masking needed. -->
+    <line class="anim-line-right-down" x1="81.0" y1="42" x2="81.0" y2="78.8" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
 
     <!-- Center node: appears first -->
     <circle class="anim-node-center" cx="49.9" cy="46.8" r="6" fill="#9333ea"/>
@@ -54,17 +57,6 @@
     </g>
   </svg>
 </div>
-
-<script>
-  // Clear stroke-dasharray after animations complete to prevent
-  // mobile Safari compositing bugs with SVG masks + dash properties
-  setTimeout(() => {
-    document.querySelectorAll('[class^="anim-line-"], .anim-arc').forEach(el => {
-      (el as SVGElement).style.strokeDasharray = 'none';
-      (el as SVGElement).style.strokeDashoffset = '0';
-    });
-  }, 2000);
-</script>
 
 <style>
   .animated-logo {
