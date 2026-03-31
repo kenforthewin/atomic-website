@@ -55,6 +55,17 @@
   </svg>
 </div>
 
+<script>
+  // Clear stroke-dasharray after animations complete to prevent
+  // mobile Safari compositing bugs with SVG masks + dash properties
+  setTimeout(() => {
+    document.querySelectorAll('[class^="anim-line-"], .anim-arc').forEach(el => {
+      (el as SVGElement).style.strokeDasharray = 'none';
+      (el as SVGElement).style.strokeDashoffset = '0';
+    });
+  }, 2000);
+</script>
+
 <style>
   .animated-logo {
     height: 2rem;
