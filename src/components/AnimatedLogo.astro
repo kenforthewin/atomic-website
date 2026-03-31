@@ -4,10 +4,8 @@
  * Sequence: center node pops → lines grow outward from center → arc draws →
  *           outer nodes pop at endpoints → "tomic" slides in
  *
- * Lines/arc animate with stroke-dasharray (no SVG mask).
- * After animations complete, JS clears dash properties and applies the
- * node-gap mask. This avoids a mobile Safari bug where stroke-dasharray
- * inside an SVG mask causes elements to vanish.
+ * Lines/arc use Web Animations API for stroke-dashoffset, removing
+ * dasharray when done to prevent repaint bugs.
  */
 ---
 
@@ -17,34 +15,20 @@
     xmlns="http://www.w3.org/2000/svg"
     class="logo-svg"
   >
-    <defs>
-      <mask id="nodeGaps" maskUnits="userSpaceOnUse">
-        <rect width="342.2" height="100" fill="white"/>
-        <circle cx="18.8" cy="62.4" r="7.2" fill="black"/>
-        <circle cx="49.9" cy="46.8" r="7.2" fill="black"/>
-        <circle cx="81.0" cy="42.0" r="7.2" fill="black"/>
-        <circle cx="49.9" cy="80.0" r="7.2" fill="black"/>
-        <circle cx="81.0" cy="78.8" r="7.2" fill="black"/>
-      </mask>
-    </defs>
+    <!-- Lines and arc -->
+    <path data-dash="150" data-delay="500" class="draw" d="M 49.9,80 A 32.6,32.6 0 1,1 81.0,42"
+      stroke="#9333ea" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <line data-dash="35" data-delay="450" class="draw" x1="49.9" y1="46.8" x2="18.8" y2="62.4" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
+    <line data-dash="32" data-delay="450" class="draw" x1="49.9" y1="46.8" x2="81.0" y2="42" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
+    <line data-dash="34" data-delay="450" class="draw" x1="49.9" y1="46.8" x2="49.9" y2="80.0" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
+    <line data-dash="37" data-delay="700" class="draw" x1="81.0" y1="42" x2="81.0" y2="78.8" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
 
-    <!-- Lines and arc: no mask during animation, mask applied via JS after -->
-    <g class="anim-lines">
-      <path class="anim-arc" d="M 49.9,80 A 32.6,32.6 0 1,1 81.0,42"
-        stroke="#9333ea" stroke-width="5" stroke-linecap="round" fill="none"/>
-      <line class="anim-line-left" x1="49.9" y1="46.8" x2="18.8" y2="62.4" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-      <line class="anim-line-right" x1="49.9" y1="46.8" x2="81.0" y2="42" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-      <line class="anim-line-down" x1="49.9" y1="46.8" x2="49.9" y2="80.0" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-      <line class="anim-line-right-down" x1="81.0" y1="42" x2="81.0" y2="78.8" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-    </g>
-
-    <!-- Center node: appears first -->
+    <!-- Nodes -->
     <circle class="anim-node-center" cx="49.9" cy="46.8" r="6" fill="#9333ea"/>
-    <!-- Outer nodes: pop in as lines reach them -->
-    <circle class="anim-node-left" cx="18.8" cy="62.4" r="6" fill="#9333ea"/>
-    <circle class="anim-node-right" cx="81.0" cy="42.0" r="6" fill="#9333ea"/>
-    <circle class="anim-node-bottom" cx="49.9" cy="80.0" r="6" fill="#9333ea"/>
-    <circle class="anim-node-bottom-right" cx="81.0" cy="78.8" r="6" fill="#9333ea"/>
+    <circle class="anim-node-outer" cx="18.8" cy="62.4" r="6" fill="#9333ea" style="transform-origin:18.8px 62.4px"/>
+    <circle class="anim-node-outer" cx="81.0" cy="42.0" r="6" fill="#9333ea" style="transform-origin:81.0px 42.0px"/>
+    <circle class="anim-node-outer" cx="49.9" cy="80.0" r="6" fill="#9333ea" style="transform-origin:49.9px 80.0px"/>
+    <circle class="anim-node-outer" cx="81.0" cy="78.8" r="6" fill="#9333ea" style="transform-origin:81.0px 78.8px"/>
 
     <!-- "tomic" text -->
     <g class="anim-tomic">
@@ -56,19 +40,30 @@
 </div>
 
 <script>
-  // After animations complete: clear dash properties and apply the mask.
-  // No mask exists during animation, so no compositing bug.
-  setTimeout(() => {
-    const lines = document.querySelector('.anim-lines');
-    if (!lines) return;
-    // Clear all dash animations
-    lines.querySelectorAll('[class^="anim-"]').forEach(el => {
-      (el as SVGElement).style.strokeDasharray = 'none';
-      (el as SVGElement).style.strokeDashoffset = '0';
-    });
-    // Apply mask for node gaps
-    lines.setAttribute('mask', 'url(#nodeGaps)');
-  }, 1600);
+  // Animate stroke-dashoffset via Web Animations API.
+  // On finish, remove dasharray so no stale animation state remains.
+  document.querySelectorAll('.draw').forEach(el => {
+    const len = Number((el as HTMLElement).dataset.dash);
+    const delay = Number((el as HTMLElement).dataset.delay);
+    const dur = el.tagName === 'path' ? 700 : 400;
+
+    const svg = el as SVGElement;
+    svg.style.strokeDasharray = String(len);
+    svg.style.strokeDashoffset = String(len);
+
+    const anim = svg.animate(
+      [
+        { strokeDashoffset: String(len) },
+        { strokeDashoffset: '0' }
+      ],
+      { duration: dur, delay, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' }
+    );
+
+    anim.onfinish = () => {
+      svg.style.strokeDasharray = '';
+      svg.style.strokeDashoffset = '';
+    };
+  });
 </script>
 
 <style>
@@ -92,56 +87,12 @@
     animation: node-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
   }
 
-  /* --- Lines grow from center outward --- */
-  .anim-line-left {
-    stroke-dasharray: 35;
-    stroke-dashoffset: 35;
-    animation: draw-line 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
-  }
-  .anim-line-right {
-    stroke-dasharray: 32;
-    stroke-dashoffset: 32;
-    animation: draw-line 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
-  }
-  .anim-line-down {
-    stroke-dasharray: 34;
-    stroke-dashoffset: 34;
-    animation: draw-line 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
-  }
-  .anim-line-right-down {
-    stroke-dasharray: 37;
-    stroke-dashoffset: 37;
-    animation: draw-line 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
-  }
-
-  @keyframes draw-line {
-    to { stroke-dashoffset: 0; }
-  }
-
-  /* --- Arc draws --- */
-  .anim-arc {
-    stroke-dasharray: 150;
-    stroke-dashoffset: 150;
-    animation: draw-arc 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-  }
-
-  @keyframes draw-arc {
-    to { stroke-dashoffset: 0; }
-  }
-
-  /* --- Outer nodes pop in as lines reach them --- */
-  .anim-node-left,
-  .anim-node-right,
-  .anim-node-bottom,
-  .anim-node-bottom-right {
+  /* --- Outer nodes pop in --- */
+  .anim-node-outer {
     opacity: 0;
     transform: scale(0);
     animation: node-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.75s forwards;
   }
-  .anim-node-left         { transform-origin: 18.8px 62.4px; }
-  .anim-node-right        { transform-origin: 81.0px 42.0px; }
-  .anim-node-bottom       { transform-origin: 49.9px 80.0px; }
-  .anim-node-bottom-right { transform-origin: 81.0px 78.8px; }
 
   @keyframes node-pop {
     to {
