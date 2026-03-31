@@ -4,11 +4,10 @@
  * Sequence: center node pops → lines grow outward from center → arc draws →
  *           outer nodes pop at endpoints → "tomic" slides in
  *
- * Two layers of lines/arc exist:
- * 1. Animated layer (no mask) — visible during animation, hidden after
- * 2. Static layer (with mask for node gaps) — hidden during animation, shown after
- * This avoids a mobile Safari bug where stroke-dasharray + SVG mask causes
- * elements to vanish after compositing changes.
+ * Lines/arc animate with stroke-dasharray (no SVG mask).
+ * After animations complete, JS clears dash properties and applies the
+ * node-gap mask. This avoids a mobile Safari bug where stroke-dasharray
+ * inside an SVG mask causes elements to vanish.
  */
 ---
 
@@ -29,17 +28,7 @@
       </mask>
     </defs>
 
-    <!-- Static masked layer: hidden during animation, swapped in after -->
-    <g class="static-lines" mask="url(#nodeGaps)">
-      <path d="M 49.9,80 A 32.6,32.6 0 1,1 81.0,42"
-        stroke="#9333ea" stroke-width="5" stroke-linecap="round" fill="none"/>
-      <line x1="18.8" y1="62.4" x2="49.9" y2="46.8" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-      <line x1="49.9" y1="46.8" x2="81.0" y2="42" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-      <line x1="49.9" y1="46.8" x2="49.9" y2="80.0" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-      <line x1="81.0" y1="42" x2="81.0" y2="78.8" stroke="#9333ea" stroke-width="5" stroke-linecap="round"/>
-    </g>
-
-    <!-- Animated layer: no mask, drawn on top during animation, hidden after -->
+    <!-- Lines and arc: no mask during animation, mask applied via JS after -->
     <g class="anim-lines">
       <path class="anim-arc" d="M 49.9,80 A 32.6,32.6 0 1,1 81.0,42"
         stroke="#9333ea" stroke-width="5" stroke-linecap="round" fill="none"/>
@@ -67,13 +56,18 @@
 </div>
 
 <script>
-  // After all animations finish, hide the animated (unmasked) lines
-  // and show the static (masked) lines for a clean final state.
+  // After animations complete: clear dash properties and apply the mask.
+  // No mask exists during animation, so no compositing bug.
   setTimeout(() => {
-    const anim = document.querySelector('.anim-lines') as SVGElement;
-    const stat = document.querySelector('.static-lines') as SVGElement;
-    if (anim) anim.style.display = 'none';
-    if (stat) stat.style.opacity = '1';
+    const lines = document.querySelector('.anim-lines');
+    if (!lines) return;
+    // Clear all dash animations
+    lines.querySelectorAll('[class^="anim-"]').forEach(el => {
+      (el as SVGElement).style.strokeDasharray = 'none';
+      (el as SVGElement).style.strokeDashoffset = '0';
+    });
+    // Apply mask for node gaps
+    lines.setAttribute('mask', 'url(#nodeGaps)');
   }, 1600);
 </script>
 
@@ -88,11 +82,6 @@
     height: 100%;
     width: auto;
     overflow: visible;
-  }
-
-  /* Static masked lines: hidden until JS swaps them in */
-  .static-lines {
-    opacity: 0;
   }
 
   /* --- Center node pop --- */
