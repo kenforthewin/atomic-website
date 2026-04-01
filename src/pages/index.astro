@@ -5,6 +5,17 @@ import canvasImg from '../assets/canvas.png';
 import wikiImg from '../assets/wiki.png';
 import searchImg from '../assets/search.png';
 import atomImg from '../assets/atom.png';
+
+let latestVersion = 'v1.2.4'; // fallback
+try {
+  const res = await fetch('https://api.github.com/repos/kenforthewin/atomic/releases/latest', {
+    headers: { 'Accept': 'application/vnd.github.v3+json' },
+  });
+  if (res.ok) {
+    const data = await res.json();
+    latestVersion = data.tag_name;
+  }
+} catch {}
 ---
 
 <BaseLayout title="Atomic — Everything You Know, Connected">
@@ -32,7 +43,7 @@ import atomImg from '../assets/atom.png';
       <div class="max-w-3xl mx-auto text-center">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 mb-8 text-xs font-medium tracking-wide uppercase text-accent bg-accent-subtle rounded-full border border-accent/10">
           <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-          v1.2.4 — Desktop, Server &amp; iOS
+          <span id="version-badge">{latestVersion}</span> — Desktop, Server &amp; iOS
         </div>
 
         <h1 class="font-display text-5xl md:text-7xl leading-[1.05] tracking-tight mb-6">
@@ -313,6 +324,18 @@ import atomImg from '../assets/atom.png';
   </section>
 
 </BaseLayout>
+
+<script>
+  fetch('https://api.github.com/repos/kenforthewin/atomic/releases/latest')
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data?.tag_name) {
+        const el = document.getElementById('version-badge');
+        if (el) el.textContent = data.tag_name;
+      }
+    })
+    .catch(() => {});
+</script>
 
 <style>
   @keyframes fade-in-up {
