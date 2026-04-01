@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
+/* Display font — Crimson Pro */
 @font-face {
-  font-family: 'Instrument Serif';
+  font-family: 'Crimson Pro';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('https://fonts.gstatic.com/s/instrumentserif/v4/jizBRFtNs2ka5fCjOQ2O.woff2') format('woff2');
+  src: url('https://fonts.gstatic.com/l/font?kit=q5uUsoa5M_tv7IihmnkabC5XiXCAlXGks1WZzm18O5E_VNSgyQ&skey=ec2e092f18395a78&v=v28') format('woff2');
 }
 
 @font-face {
-  font-family: 'Instrument Serif';
+  font-family: 'Crimson Pro';
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url('https://fonts.gstatic.com/s/instrumentserif/v4/jizHRFtNs2ka5fCjOQ2G.woff2') format('woff2');
+  src: url('https://fonts.gstatic.com/l/font?kit=q5uSsoa5M_tv7IihmnkabAReu49Y_Bo-HVKMBi6Ue5s4dtC4yJtE&skey=929d48ffa46440d3&v=v28') format('woff2');
 }
 
 @font-face {
@@ -49,7 +50,7 @@
 }
 
 @theme {
-  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-display: 'Crimson Pro', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'DM Mono', monospace;
 
