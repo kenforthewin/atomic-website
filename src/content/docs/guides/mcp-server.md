@@ -18,28 +18,90 @@ The MCP endpoint is built into `atomic-server`. When an agent connects, it gets 
 
 The server uses [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) transport at the `/mcp` endpoint, with Bearer token authentication.
 
-## Setup
+## Desktop App (Local Mode)
 
-### Prerequisites
+The desktop app bundles `atomic-mcp-bridge`, a stdio-to-HTTP bridge that connects to the local server and handles authentication automatically. No token configuration needed.
 
-You need `atomic-server` running. See [Self-Hosting](/getting-started/self-hosting/) or use the desktop app (which runs the server automatically).
+Open **Settings > Integrations > MCP Integration** in the Atomic desktop app to see the exact configuration for your system. It will look like this:
 
-You also need an API token. The server prints a default token on first run, or you can create one:
+### Claude Code
+
+Add to `.mcp.json` in your project root or `~/.claude/mcp.json` globally:
+
+```json
+{
+  "mcpServers": {
+    "atomic": {
+      "command": "/Applications/Atomic.app/Contents/MacOS/atomic-mcp-bridge"
+    }
+  }
+}
+```
+
+### Claude Desktop
+
+Add to your Claude Desktop config (`Settings > Developer > Edit Config`):
+
+```json
+{
+  "mcpServers": {
+    "atomic": {
+      "command": "/Applications/Atomic.app/Contents/MacOS/atomic-mcp-bridge"
+    }
+  }
+}
+```
+
+### Cursor
+
+Add to `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "atomic": {
+      "command": "/Applications/Atomic.app/Contents/MacOS/atomic-mcp-bridge"
+    }
+  }
+}
+```
+
+:::note
+The path above is the default macOS location. On Linux the path depends on how Atomic was installed. Check **Settings > Integrations** in the app for the exact path on your system.
+:::
+
+The bridge reads the auth token from the Atomic data directory automatically. You can override connection settings with environment variables if needed:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ATOMIC_TOKEN` | (auto-discovered) | Override the auth token |
+| `ATOMIC_HOST` | `127.0.0.1` | Server host |
+| `ATOMIC_PORT` | `44380` | Server port |
+
+## Remote / Self-Hosted / Web
+
+For remote servers or the web app, connect via the HTTP endpoint directly. You'll need an API token for authentication.
+
+### Creating a Token
+
+**From the UI:** Go to **Settings > Integrations > MCP Integration** and click **Create MCP Token**. The config with your token embedded will be shown — copy it immediately, as the token is only displayed once.
+
+**From the CLI:**
 
 ```bash
-cargo run -p atomic-server -- token create --name "claude"
+atomic-server token create --name "claude"
 ```
 
 ### Claude Code
 
-Add to your Claude Code MCP settings (`.mcp.json` in your project root or `~/.claude/mcp.json` globally):
+Add to `.mcp.json` in your project root or `~/.claude/mcp.json` globally:
 
 ```json
 {
   "mcpServers": {
     "atomic": {
       "type": "url",
-      "url": "http://localhost:44380/mcp",
+      "url": "https://your-server.com/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_TOKEN"
       }
@@ -50,14 +112,14 @@ Add to your Claude Code MCP settings (`.mcp.json` in your project root or `~/.cl
 
 ### Claude Desktop
 
-Claude Desktop supports Streamable HTTP MCP servers. Add to your Claude Desktop config:
+Add to your Claude Desktop config:
 
 ```json
 {
   "mcpServers": {
     "atomic": {
       "type": "url",
-      "url": "http://localhost:44380/mcp",
+      "url": "https://your-server.com/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_TOKEN"
       }
@@ -68,34 +130,16 @@ Claude Desktop supports Streamable HTTP MCP servers. Add to your Claude Desktop 
 
 ### Cursor
 
-Add to your Cursor MCP settings (`.cursor/mcp.json`):
+Add to `.cursor/mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "atomic": {
       "type": "url",
-      "url": "http://localhost:44380/mcp",
+      "url": "https://your-server.com/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_TOKEN"
-      }
-    }
-  }
-}
-```
-
-### Stdio Bridge
-
-For MCP clients that only support stdio transport, Atomic includes a bridge binary (`atomic-mcp-bridge`) that translates between stdio and the server's HTTP endpoint:
-
-```json
-{
-  "mcpServers": {
-    "atomic": {
-      "command": "path/to/atomic-mcp-bridge",
-      "env": {
-        "ATOMIC_HOST": "127.0.0.1",
-        "ATOMIC_PORT": "44380"
       }
     }
   }
