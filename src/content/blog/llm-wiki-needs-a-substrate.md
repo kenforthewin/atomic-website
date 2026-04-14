@@ -1,14 +1,12 @@
 ---
 title: Reports of RAG's death have been greatly exaggerated
 description: Andrej Karpathy posted a markdown directory and the timeline declared the vector database obsolete. A brief note on what the eulogy left out.
-date: 2026-04-13
+date: 2026-04-14
 author: Kenny
 draft: false
 ---
 
-In early April, Andrej Karpathy [posted an "idea file"](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) describing how he'd been having an LLM maintain a personal wiki of markdown files instead of re-querying raw documents on every question. Sensible. Useful. The kind of small, well-observed workflow note Karpathy is unusually good at.
-
-Sixteen million views later, the timeline rendered its verdict.
+Recently Andrej Karpathy [posted an "idea file"](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) describing how he'd been having an LLM maintain a personal wiki of markdown files instead of re-querying raw documents on every question. Sixteen million views later, the timeline rendered its verdict.
 
 > "Karpathy shares 'LLM Knowledge Base' architecture that bypasses RAG with an evolving markdown library maintained by AI." — [VentureBeat](https://venturebeat.com/data/karpathy-shares-llm-knowledge-base-architecture-that-bypasses-rag-with-an)
 >
@@ -20,27 +18,23 @@ Sixteen million views later, the timeline rendered its verdict.
 >
 > "RAG is Dead, Long Live the Agentic Wiki. The era of stateless retrieval is over." — [Epsilla](https://www.epsilla.com/blogs/karpathy-agentic-wiki-beyond-rag-enterprise-memory)
 
-Derivative gists appeared. Entire build-it-yourself stacks were published within the week. The vector database, after a brief and well-funded run, was officially over.
+RIP vector databases, you had a good run!
 
-I'd like to gently push back on the obituary.
+## Or...?
 
-## What he actually said
+Strip the eulogies away and the gist itself is making a real point: **the wiki is a persistent, compounding artifact**. Most RAG pipelines treat knowledge as something to look up on demand; each question pays the cost of rediscovery. A wiki is different. The summarization, the cross-references, the "what we believe and why", that work happens once, gets written down, and accumulates.
 
-The valuable insight in the gist is real: **the wiki is a persistent, compounding artifact**. Most RAG pipelines treat knowledge as something to look up on demand — chunks in a vector store, retrieved per query, forgotten after. Each question pays the cost of rediscovery. A wiki is different. The summarization, the cross-references, the "what we believe and why" — that work happens once, gets written down, and accumulates.
-
-LLMs, as Karpathy notes, are uniquely well-suited to maintain this kind of structure. They don't get bored. They will happily touch fifteen files to update one cross-reference. Bookkeeping is the job they were born for. None of this is in dispute.
+LLMs are incredible at maintaining this kind of structure. They don't get bored. They will happily touch fifteen files to update one cross-reference. Bookkeeping is the job they were born for. None of this is in dispute.
 
 What is, perhaps, in dispute is whether any of it requires us to retire vector embeddings.
 
 ## The footnote
 
-Read the gist past the architecture diagrams and you find a number. Karpathy reports running this setup at roughly **100 articles and 400,000 words**.
+There's a number in the gist worth noticing: Karpathy runs this at roughly 100 articles and 400,000 words.
 
-A hundred wiki pages. At that size, the agent navigates by index and summary alone because the index *fits in context*. The model doesn't search; it reads the catalog. "Retrieval" is `ls`.
+At that size, the agent navigates by index and summary alone because the index *fits in context*. The "retrieval" part of RAG is `ls`.
 
-This is fine — at this scale. It is also, I'd argue, the entire reason the system works without an embedding index. The "bye bye RAG" framing the discourse extracted from the post quietly assumes that what works at 100 pages works at 10,000. It does not. Walking a directory with an agent is `O(n)` in the files the agent has to consider, and the context window is the only thing keeping that tractable. A thousand pages strains it. Ten thousand breaks it. At a hundred thousand notes — the size of an actually-used long-running knowledge base — agentic grep is brute-force retrieval in a slightly nicer outfit.
-
-The scale caveat got lost somewhere between the original post and the third Medium tutorial.
+This is fine — at this scale. It is also, I'd argue, the entire reason the system works without an embedding index. The "bye bye RAG" framing the discourse extracted from the post quietly assumes that what works at 100 pages works at 10,000. It does not. Walking a directory with an agent is `O(n)` in the files the agent has to consider, and the context window is the only thing keeping that tractable. A thousand pages strains it. Ten thousand breaks it. Agentic grep is brute-force retrieval, `find . | xargs llm` in a trenchcoat.
 
 ## The wrong axis
 
@@ -51,11 +45,11 @@ It helps to notice that "wiki" and "vector index" aren't competing answers to th
 
 Karpathy's pattern collapses these because at his scale the substrate is trivial. `ls` is a perfectly good index for a hundred files. But the second your knowledge base outgrows what fits in context, you need a real substrate underneath the wiki, not as a replacement for it.
 
-Vector embeddings remain the cheapest way to ask "what's relevant to this idea?" across an arbitrary-sized corpus, in milliseconds, without an LLM in the loop. That hasn't changed. It didn't change in April. It is not, I regret to report, going to change because a gist went viral.
+Vector embeddings remain the cheapest way to ask "what's relevant to this idea?" across an arbitrary-sized corpus, in milliseconds, without an LLM in the loop. That hasn't changed.
 
 ## How Atomic handles it
 
-[Atomic](https://github.com/kenforthewin/atomic) is built on the unfashionable premise that the wiki and the index belong in the same system. The pitch is short: **drop anything in — RSS feeds, articles, web clips, notes, Obsidian vaults, Wikipedia pages — and get a knowledge base out**. A pipeline does the work the wiki pattern asks of you; vectors are the substrate underneath it.
+[Atomic](https://github.com/kenforthewin/atomic) is built on the premise that the wiki and the index belong in the same system. The pitch is short: **drop anything in — RSS feeds, articles, web clips, notes, Obsidian vaults, Wikipedia pages — and get a knowledge base out**. A pipeline does the work the wiki pattern asks of you; vectors are the substrate underneath it.
 
 <figure>
   <img src="/images/screenshots/wiki.png" alt="Atomic wiki synthesis with inline citations" />
