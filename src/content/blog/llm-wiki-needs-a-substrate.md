@@ -73,8 +73,8 @@ Concretely:
 - **Daily briefing** is the wiki idea applied to time: an AI-generated summary of everything you captured recently, with inline citations and a mini-canvas of source atoms. The compounding artifact, delivered every morning.
 
 <figure>
-  <img src="/images/screenshots/canvas.png" alt="Atomic canvas view showing semantically clustered atoms" />
-  <figcaption>The canvas: semantically related atoms cluster spatially. The graph that powers retrieval, made visible.</figcaption>
+  <img src="/images/screenshots/canvas-chat.png" alt="Atomic canvas with agentic chat grounded in the graph" />
+  <figcaption>Agentic chat running against the canvas: the agent searches semantically and grounds answers in actual atoms, not a frozen wiki snapshot.</figcaption>
 </figure>
 
 Wiki synthesis on top of vector retrieval. Persistent artifacts on top of an index that scales. Both halves of the system the discourse decided to split apart.
