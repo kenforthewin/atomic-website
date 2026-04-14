@@ -9,6 +9,20 @@ interface Props {
 }
 
 const { title, description = 'A personal knowledge base that turns freeform notes into a semantically-connected, AI-augmented knowledge graph.', dark = false } = Astro.props;
+
+let stars: number | null = null;
+try {
+  const res = await fetch('https://api.github.com/repos/kenforthewin/atomic', {
+    headers: { 'Accept': 'application/vnd.github.v3+json' },
+  });
+  if (res.ok) {
+    const data = await res.json();
+    if (typeof data.stargazers_count === 'number') stars = data.stargazers_count;
+  }
+} catch {}
+
+const formatStars = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k` : String(n);
+const starsLabel = stars !== null ? formatStars(stars) : '';
 ---
 
 <!doctype html>
@@ -38,9 +52,22 @@ const { title, description = 'A personal knowledge base that turns freeform note
             href="https://github.com/kenforthewin/atomic"
             target="_blank"
             rel="noopener noreferrer"
-            class:list={['text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}
+            class:list={['group inline-flex items-center gap-2 text-sm transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}
           >
-            GitHub
+            <span>GitHub</span>
+            <span
+              class:list={[
+                'inline-flex items-center gap-1 px-1.5 h-[1.375rem] text-[0.6875rem] leading-none rounded-full border transition-colors',
+                dark ? 'border-[#2d2d2d] group-hover:border-[#3d3d3d]' : 'border-border group-hover:border-accent/30',
+                !starsLabel && 'hidden',
+              ]}
+              data-stars-wrapper
+            >
+              <svg class="w-3 h-3 text-amber-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+              </svg>
+              <span class="tabular-nums font-medium" data-stars-label>{starsLabel}</span>
+            </span>
           </a>
           <a
             href="https://github.com/kenforthewin/atomic/releases/latest"
@@ -73,9 +100,18 @@ const { title, description = 'A personal knowledge base that turns freeform note
             href="https://github.com/kenforthewin/atomic"
             target="_blank"
             rel="noopener noreferrer"
-            class:list={['text-sm py-1.5 transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}
+            class:list={['inline-flex items-center gap-1.5 text-sm py-1.5 transition-colors', dark ? 'text-gray-400 hover:text-white' : 'text-text-secondary hover:text-text-primary']}
           >
-            GitHub
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+            <span>GitHub</span>
+            <span class:list={['inline-flex items-center gap-1 ml-1 px-1.5 py-0.5 text-xs rounded border', dark ? 'border-[#2d2d2d] bg-[#1e1e1e]' : 'border-border-light bg-bg-white/50', !starsLabel && 'hidden']} data-stars-wrapper>
+              <svg class="w-3 h-3 text-amber-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+              </svg>
+              <span data-stars-label>{starsLabel}</span>
+            </span>
           </a>
           <a
             href="https://github.com/kenforthewin/atomic/releases/latest"
@@ -95,6 +131,21 @@ const { title, description = 'A personal knowledge base that turns freeform note
         menu?.classList.toggle('hidden');
         toggle.setAttribute('aria-expanded', String(!open));
       });
+
+      fetch('https://api.github.com/repos/kenforthewin/atomic')
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          const n = data?.stargazers_count;
+          if (typeof n !== 'number') return;
+          const label = n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k` : String(n);
+          document.querySelectorAll('[data-stars-label]').forEach(el => {
+            el.textContent = label;
+          });
+          document.querySelectorAll('[data-stars-wrapper]').forEach(el => {
+            el.classList.remove('hidden');
+          });
+        })
+        .catch(() => {});
     </script>
 
     <main class="pt-16">
