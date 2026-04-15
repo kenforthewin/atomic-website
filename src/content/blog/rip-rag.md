@@ -1,12 +1,12 @@
 ---
 title: Reports of RAG's death have been greatly exaggerated
 description: Andrej Karpathy posted a markdown directory and the timeline declared the vector database obsolete. A brief note on what the eulogy left out.
-date: 2026-04-14
+date: 2026-04-15
 author: Kenny
 draft: false
 ---
 
-Recently Andrej Karpathy [posted an "idea file"](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) describing how he'd been having an LLM maintain a personal wiki of markdown files instead of re-querying raw documents on every question. Sixteen million views later, the timeline rendered its verdict.
+I've been mulling over this post since Andrej Karpathy [posted an "idea file"](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) describing how he'd been having an LLM maintain a personal wiki of markdown files instead of re-querying raw documents on every question. I started work on Atomic around 5 months ago with more or less the same premise as Karpathy's wiki setup, so it didn't surprise me that the post went viral - it's a good idea! What did surprise me was the framing of the subsequent think pieces and tech takes:
 
 > "Karpathy shares 'LLM Knowledge Base' architecture that bypasses RAG with an evolving markdown library maintained by AI." — [VentureBeat](https://venturebeat.com/data/karpathy-shares-llm-knowledge-base-architecture-that-bypasses-rag-with-an)
 >
@@ -34,7 +34,7 @@ There's a number in the gist worth noticing: Karpathy runs this at roughly 100 a
 
 At that size, the agent navigates by index and summary alone because the index *fits in context*. The "retrieval" part of RAG is `ls`.
 
-This is fine — at this scale. It is also, I'd argue, the entire reason the system works without an embedding index. The "bye bye RAG" framing the discourse extracted from the post quietly assumes that what works at 100 pages works at 10,000. It does not. Walking a directory with an agent is `O(n)` in the files the agent has to consider, and the context window is the only thing keeping that tractable. A thousand pages strains it. Ten thousand breaks it. Agentic grep is brute-force retrieval, `find . | xargs llm` in a trenchcoat.
+This is fine — at this scale. It is also, I'd argue, the entire reason the system works without an embedding index. The "bye bye RAG" framing assumes that what works at 100 pages works at 10,000. It does not. Walking a directory with an agent is `O(n)` in the files the agent has to consider, and the context window is the only thing keeping that tractable. A thousand pages strains it. Ten thousand breaks it. Agentic grep is brute-force retrieval, `find . | xargs llm` in a trenchcoat.
 
 ## The wrong axis
 

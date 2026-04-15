@@ -7,6 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
+  redirects: {
+    '/blog/llm-wiki-needs-a-substrate': '/blog/rip-rag',
+  },
   integrations: [
     starlight({
       title: 'Atomic',
