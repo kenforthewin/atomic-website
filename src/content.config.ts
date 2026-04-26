@@ -13,6 +13,8 @@ export const collections = {
       date: z.coerce.date(),
       author: z.string().default('Kenny'),
       draft: z.boolean().default(false),
+      tags: z.array(z.string()).optional(),
+      ogImage: z.string().optional(),
     }),
   }),
 };

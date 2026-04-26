@@ -20,9 +20,41 @@ try {
 const starsLabel = stars !== null
   ? (stars >= 1000 ? `${(stars / 1000).toFixed(1).replace(/\.0$/, '')}k` : String(stars))
   : '';
+
+const softwareJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Atomic',
+  description: 'A local-first personal knowledge base that turns freeform notes into a semantically-connected, AI-augmented knowledge graph.',
+  applicationCategory: 'ProductivityApplication',
+  operatingSystem: 'macOS, Windows, Linux, iOS',
+  url: 'https://atomicapp.ai',
+  downloadUrl: 'https://github.com/kenforthewin/atomic/releases/latest',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: { '@type': 'Person', name: 'Kenny Bergquist', url: 'https://github.com/kenforthewin' },
+};
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Atomic',
+  url: 'https://atomicapp.ai',
+  logo: 'https://atomicapp.ai/logo.svg',
+  sameAs: ['https://github.com/kenforthewin/atomic'],
+};
 ---
 
 <BaseLayout title="Atomic — A local-first knowledge graph">
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(softwareJsonLd)}
+  />
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(organizationJsonLd)}
+  />
 
   <!-- Hero -->
   <section class="relative overflow-hidden">

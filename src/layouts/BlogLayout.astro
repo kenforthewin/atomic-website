@@ -6,12 +6,44 @@ interface Props {
   description: string;
   date: Date;
   author: string;
+  ogImage?: string;
 }
 
-const { title, description, date, author } = Astro.props;
+const { title, description, date, author, ogImage } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const imageURL = new URL(ogImage ?? '/social-preview.png', Astro.site).toString();
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished: date.toISOString(),
+  author: { '@type': 'Person', name: author },
+  image: imageURL,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalURL },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Atomic',
+    logo: { '@type': 'ImageObject', url: new URL('/logo.svg', Astro.site).toString() },
+  },
+};
 ---
 
-<BaseLayout title={`${title} — Atomic Blog`} description={description}>
+<BaseLayout
+  title={`${title} — Atomic Blog`}
+  description={description}
+  ogImage={ogImage}
+  ogType="article"
+  articlePublishedTime={date.toISOString()}
+  articleAuthor={author}
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(articleJsonLd)}
+  />
   <article class="max-w-2xl mx-auto px-6 py-16 md:py-24">
     <header class="mb-10">
       <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text-secondary transition-colors mb-6">

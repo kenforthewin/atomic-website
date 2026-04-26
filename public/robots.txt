@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://atomicapp.ai/sitemap-index.xml

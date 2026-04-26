@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@astrojs/react": "^5.0.1",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
     "@astrojs/starlight": "^0.38.2",
     "@scalar/api-reference-react": "^0.9.14",
     "@scalar/openapi-parser": "^0.25.6",

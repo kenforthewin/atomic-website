@@ -2,15 +2,18 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://atomicapp.ai',
   output: 'static',
   redirects: {
     '/blog/llm-wiki-needs-a-substrate': '/blog/rip-rag',
   },
   integrations: [
+    sitemap(),
     starlight({
       title: 'Atomic',
       logo: {

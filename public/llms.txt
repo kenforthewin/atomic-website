@@ -1,0 +1,55 @@
+# Atomic
+
+> Atomic is a local-first personal knowledge base that turns freeform notes into a semantically-connected, AI-augmented knowledge graph. Notes are stored as plain markdown "atoms" linked by tags, semantic search (vector embeddings), and an evolving wiki synthesized by LLMs. Atomic runs locally, can be self-hosted, and works with multiple AI providers.
+
+## Core concepts
+
+- [Atoms](https://atomicapp.ai/concepts/atoms/): The unit of knowledge — a single markdown note.
+- [Tags](https://atomicapp.ai/concepts/tags/): How atoms are grouped and connected.
+- [Semantic search](https://atomicapp.ai/concepts/semantic-search/): Vector-embedding search across all atoms.
+- [Wiki synthesis](https://atomicapp.ai/concepts/wiki-synthesis/): LLM-generated, evolving wiki built from your atoms.
+- [Chat](https://atomicapp.ai/concepts/chat/): Talk to your knowledge base.
+- [Canvas](https://atomicapp.ai/concepts/canvas/): Spatial interface for arranging atoms.
+- [Daily briefings](https://atomicapp.ai/concepts/daily-briefings/): Automated summaries.
+
+## Getting started
+
+- [Overview](https://atomicapp.ai/getting-started/)
+- [Installation](https://atomicapp.ai/getting-started/installation/)
+- [Self-hosting](https://atomicapp.ai/getting-started/self-hosting/)
+- [AI providers](https://atomicapp.ai/getting-started/ai-providers/)
+
+## Guides
+
+- [Browser extension](https://atomicapp.ai/guides/browser-extension/)
+- [MCP server](https://atomicapp.ai/guides/mcp-server/)
+- [iOS app](https://atomicapp.ai/guides/ios-app/)
+- [Importing data](https://atomicapp.ai/guides/importing-data/)
+- [URL ingestion and feeds](https://atomicapp.ai/guides/url-ingestion-and-feeds/)
+- [Multi-database](https://atomicapp.ai/guides/multi-database/)
+
+## Self-hosting
+
+- [First-run setup](https://atomicapp.ai/self-hosting/first-run-setup/)
+- [Docker Compose](https://atomicapp.ai/self-hosting/docker-compose/)
+- [Configuration](https://atomicapp.ai/self-hosting/configuration/)
+- [Token management](https://atomicapp.ai/self-hosting/token-management/)
+- [Data and backups](https://atomicapp.ai/self-hosting/data-and-backups/)
+
+## API
+
+- [API overview](https://atomicapp.ai/api/overview/)
+- [WebSocket events](https://atomicapp.ai/api/websocket-events/)
+- [Interactive API explorer](https://atomicapp.ai/api/explorer/)
+- [OpenAPI spec](https://atomicapp.ai/openapi.json)
+
+## Blog
+
+- [Index](https://atomicapp.ai/blog/)
+- [RSS](https://atomicapp.ai/rss.xml)
+
+## Project
+
+- [Source code](https://github.com/kenforthewin/atomic)
+- [Latest release](https://github.com/kenforthewin/atomic/releases/latest)
+- [Issue tracker](https://github.com/kenforthewin/atomic/issues)

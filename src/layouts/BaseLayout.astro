@@ -6,9 +6,24 @@ interface Props {
   title: string;
   description?: string;
   dark?: boolean;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  articlePublishedTime?: string;
+  articleAuthor?: string;
 }
 
-const { title, description = 'A personal knowledge base that turns freeform notes into a semantically-connected, AI-augmented knowledge graph.', dark = false } = Astro.props;
+const {
+  title,
+  description = 'A personal knowledge base that turns freeform notes into a semantically-connected, AI-augmented knowledge graph.',
+  dark = false,
+  ogImage = '/social-preview.png',
+  ogType = 'website',
+  articlePublishedTime,
+  articleAuthor,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageURL = new URL(ogImage, Astro.site).toString();
 
 let stars: number | null = null;
 try {
@@ -31,10 +46,28 @@ const starsLabel = stars !== null ? formatStars(stars) : '';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title="Atomic Blog" href="/rss.xml" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Atomic" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    {articlePublishedTime && <meta property="article:published_time" content={articlePublishedTime} />}
+    {articleAuthor && <meta property="article:author" content={articleAuthor} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
     <title>{title}</title>
+    <slot name="head" />
   </head>
   <body class:list={['font-body antialiased', dark ? 'bg-[#1e1e1e] text-white' : 'bg-bg-primary text-text-primary']}>
     <nav class:list={['fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b', dark ? 'bg-[#252525]/90 border-[#2d2d2d]' : 'bg-bg-primary/80 border-border-light']}>
