@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # WIP logo explorations
 logo-explorations/
+
+# user-facing docs are pulled from kenforthewin/atomic at build/dev time.
+# `npm run dev` and `npm run build` invoke `scripts/sync-docs.sh` automatically.
+src/content/docs

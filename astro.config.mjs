@@ -41,6 +41,7 @@ export default defineConfig({
             { label: 'Wiki Synthesis', slug: 'concepts/wiki-synthesis' },
             { label: 'Chat', slug: 'concepts/chat' },
             { label: 'Canvas', slug: 'concepts/canvas' },
+            { label: 'Daily Briefings', slug: 'concepts/daily-briefings' },
           ],
         },
         {
@@ -50,20 +51,25 @@ export default defineConfig({
             { label: 'MCP Server', slug: 'guides/mcp-server' },
             { label: 'iOS App', slug: 'guides/ios-app' },
             { label: 'Importing Data', slug: 'guides/importing-data' },
+            { label: 'URL Ingestion and Feeds', slug: 'guides/url-ingestion-and-feeds' },
+            { label: 'Multi-Database', slug: 'guides/multi-database' },
           ],
         },
         {
           label: 'Self-Hosting',
           items: [
+            { label: 'First-Run Setup', slug: 'self-hosting/first-run-setup' },
             { label: 'Docker Compose', slug: 'self-hosting/docker-compose' },
             { label: 'Configuration', slug: 'self-hosting/configuration' },
             { label: 'Token Management', slug: 'self-hosting/token-management' },
+            { label: 'Data and Backups', slug: 'self-hosting/data-and-backups' },
           ],
         },
         {
           label: 'API Reference',
           items: [
             { label: 'Overview', slug: 'api/overview' },
+            { label: 'WebSocket Events', slug: 'api/websocket-events' },
             { label: 'Interactive Explorer', link: '/api/explorer' },
           ],
         },

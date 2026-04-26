@@ -13,10 +13,14 @@ Marketing site, documentation, and blog for [Atomic](https://github.com/kenforth
 ## Common Commands
 
 ```bash
-npm run dev          # Dev server (exposed to local network via --host)
-npm run build        # Production build → dist/
-npm run preview      # Preview production build locally
+npm run dev               # Dev server (syncs docs first, then exposes via --host)
+npm run build             # Production build → dist/ (always pulls fresh docs)
+npm run preview           # Preview production build locally
+npm run sync-docs         # Pull docs from atomic main (no-op if already present)
+npm run sync-docs:fresh   # Force re-pull docs from atomic main
 ```
+
+Docs are sourced from `kenforthewin/atomic/docs/manual/` — `src/content/docs/` is gitignored. See "Documentation" below.
 
 ## Site Structure
 
@@ -34,6 +38,7 @@ The site has three distinct sections with different design treatments:
 - Docs pages are plain markdown with Starlight frontmatter (`title`, `description`)
 - **Slugs do NOT include a `docs/` prefix** — a file at `src/content/docs/concepts/atoms.md` has slug `concepts/atoms` and URL `/concepts/atoms/`
 - Internal links between docs pages use absolute paths without `docs/`: `/concepts/atoms/`, `/getting-started/installation/`
+- **Source of truth lives in [kenforthewin/atomic](https://github.com/kenforthewin/atomic) at `docs/manual/`** — not in this repo. `src/content/docs/` is gitignored and populated by `scripts/sync-docs.sh`, which clones the atomic repo (shallow) and copies `docs/manual/` into place. `npm run dev` and `npm run build` invoke this automatically. Edit docs in the atomic repo, push to main, then re-run `npm run sync-docs:fresh` to pick up changes.
 
 ### Blog (`src/pages/blog/`, `src/content/blog/`)
 - Light theme matching the landing page
@@ -43,7 +48,7 @@ The site has three distinct sections with different design treatments:
 - Blog post URLs use the file's `id` from the glob loader: `/blog/introducing-atomic/`
 
 ### API Explorer (`src/pages/api/explorer.astro`)
-- Placeholder page for future Scalar integration with static `openapi.json`
+- Scalar-powered explorer that loads the OpenAPI JSON published by the Atomic release workflow
 - Will use a React island component to render the interactive API docs
 
 ## Directory Layout
@@ -117,6 +122,8 @@ Defined in `global.css` under `@theme`. Use as: `bg-bg-primary`, `text-text-seco
 
 ## Relationship to Main Repo
 
-This website is a separate repo from [kenforthewin/atomic](https://github.com/kenforthewin/atomic). There are no shared dependencies or build steps. Content that references the app (screenshots, API spec) is copied manually.
+This website is a separate repo from [kenforthewin/atomic](https://github.com/kenforthewin/atomic), but it is not standalone. **User-facing docs are sourced from `kenforthewin/atomic/docs/manual/`** — the marketing site, blog, and design live here, but the docs content is pulled in at build time via `scripts/sync-docs.sh`. Edits to docs should happen in the atomic repo.
 
-The API explorer will eventually load a static `openapi.json` file. The main repo generates this via utoipa at runtime (`/api/docs/openapi.json`). Plan is to add an `openapi-export` CLI subcommand to `atomic-server` for build-time extraction.
+Other content that references the app:
+- **Screenshots** in `public/images/screenshots/` are copied manually from `kenforthewin/atomic/docs/images/`. Not auto-synced.
+- **API explorer** loads the OpenAPI JSON published by the Atomic release workflow at `https://kenforthewin.github.io/atomic/openapi.json`. Set `PUBLIC_ATOMIC_OPENAPI_URL` to point previews or forks at a different spec.
