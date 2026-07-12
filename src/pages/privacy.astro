@@ -2,58 +2,58 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Privacy Policy — Atomic" description="Privacy policy for the Atomic app.">
+<BaseLayout title="Privacy Policy — Atomic" description="Privacy policy for the Atomic app and Atomic Cloud.">
   <section class="max-w-3xl mx-auto px-6 py-24">
     <h1 class="text-3xl font-bold mb-2">Privacy Policy</h1>
-    <p class="text-text-secondary mb-12">Last updated: March 29, 2026</p>
+    <p class="text-text-secondary mb-12">Last updated: July 11, 2026</p>
 
     <div class="space-y-8 text-text-secondary leading-relaxed">
       <div>
         <h2 class="text-xl font-semibold text-text-primary mb-3">Overview</h2>
         <p>
-          Atomic is a self-hosted personal knowledge base. The Atomic iOS app is a client that connects to a server you run yourself. We do not operate any cloud services, and we have no access to your data.
+          Atomic comes in two shapes. <strong>Self-hosted Atomic</strong> (the desktop app, your own server, and the clients that connect to it) runs entirely on hardware you control — we never see your data. <strong>Atomic Cloud</strong> is our hosted service, where we store your knowledge base on your behalf. This policy covers both, separately, because they are genuinely different.
         </p>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold text-text-primary mb-3">Data Collection</h2>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Self-Hosted &amp; Desktop</h2>
         <p>
-          Atomic does not collect, transmit, or store any personal data on our servers. All your notes, tags, and settings are stored on your own self-hosted Atomic server. The app communicates exclusively with the server address you configure.
+          When you run Atomic yourself, we do not collect, transmit, or store any of your data. Your notes, tags, and settings live on your own machine or server, and the apps communicate exclusively with the server address you configure. There are no analytics, crash reporting, advertising, or tracking frameworks in any Atomic client. The iOS app stores your server URL and API token on-device, keeps a local cache for offline access, and requests camera access solely to scan QR codes during setup — that data never reaches us.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Atomic Cloud — What We Store</h2>
+        <p>
+          When you create an Atomic Cloud account we store your email address (used for magic-link sign-in and service emails), your chosen subdomain, and the content you put into your knowledge base: notes, files, tags, and the derived data that powers Atomic's features (embeddings, generated wiki articles, chat history). Content is stored on encrypted volumes, in an isolated database per account, and backed up on a fixed schedule.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Atomic Cloud — Service Providers</h2>
+        <p>
+          We use a small set of processors to operate the service, each receiving only what its job requires: <strong>DigitalOcean</strong> (infrastructure hosting), <strong>OpenRouter</strong> (AI processing — your content is sent to produce the embeddings, tags, summaries, and chat responses you request, and is not used to train models), <strong>Stripe</strong> (payments — we never see or store your card details), <strong>Mailgun</strong> (transactional email, e.g. magic links and billing notices), and <strong>Cloudflare</strong> (this website and backup storage). We do not sell your data, share it with advertisers, or use it for any purpose other than providing the service.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Atomic Cloud — Your Control</h2>
+        <p>
+          You can export your data or migrate your entire knowledge base to a self-hosted server at any time. Deleting your account permanently removes your content from the service, with backups aging out on a fixed schedule afterward. Your data is never deleted for non-payment.
         </p>
       </div>
 
       <div>
         <h2 class="text-xl font-semibold text-text-primary mb-3">Analytics &amp; Tracking</h2>
         <p>
-          Atomic does not include any analytics, crash reporting, advertising, or tracking frameworks. No usage data is sent to us or any third party.
-        </p>
-      </div>
-
-      <div>
-        <h2 class="text-xl font-semibold text-text-primary mb-3">Network Access</h2>
-        <p>
-          The app connects to your self-hosted server over your local network or the internet, using the URL and API token you provide. The Share Extension uses this same connection to save web pages you share from Safari or other apps.
-        </p>
-      </div>
-
-      <div>
-        <h2 class="text-xl font-semibold text-text-primary mb-3">Camera Access</h2>
-        <p>
-          The app requests camera access solely to scan QR codes during server setup. Camera data is processed on-device and is never transmitted or stored.
-        </p>
-      </div>
-
-      <div>
-        <h2 class="text-xl font-semibold text-text-primary mb-3">Local Storage</h2>
-        <p>
-          The app stores your server URL and API token on your device to maintain the connection. A local cache of your atoms and tags is kept for offline access. This data never leaves your device except when syncing with your server.
+          Neither the Atomic apps nor this website include third-party analytics, advertising, or tracking frameworks. Atomic Cloud keeps ordinary server logs (for security and reliability) that age out on a fixed schedule.
         </p>
       </div>
 
       <div>
         <h2 class="text-xl font-semibold text-text-primary mb-3">Contact</h2>
         <p>
-          If you have questions about this privacy policy, please open an issue on <a href="https://github.com/kenforthewin/atomic" class="text-accent hover:underline">GitHub</a>.
+          If you have questions about this privacy policy, please open an issue on <a href="https://github.com/kenforthewin/atomic" class="text-accent hover:underline">GitHub</a> or ask in the <a href="https://discord.gg/fT4vTERhz3" class="text-accent hover:underline">community Discord</a>.
         </p>
       </div>
     </div>

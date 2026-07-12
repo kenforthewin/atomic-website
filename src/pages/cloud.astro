@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const SIGNUP_URL = 'https://app.atomicapp.ai/signup';
+
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'Atomic Cloud',
+  description:
+    'Hosted Atomic: a personal knowledge base with semantic search, wiki synthesis, and agentic chat — AI included, nothing to configure.',
+  brand: { '@type': 'Organization', name: 'Atomic' },
+  offers: [
+    {
+      '@type': 'Offer',
+      name: 'Free',
+      price: '0',
+      priceCurrency: 'USD',
+      url: 'https://atomicapp.ai/cloud',
+    },
+    {
+      '@type': 'Offer',
+      name: 'Pro',
+      price: '12',
+      priceCurrency: 'USD',
+      url: 'https://atomicapp.ai/cloud',
+    },
+  ],
+};
+
+const faqs = [
+  {
+    q: 'Do I need my own AI API keys?',
+    a: 'No. Every Atomic Cloud account comes with managed AI built in — embeddings, auto-tagging, wiki synthesis, and chat work the moment you sign up. Each plan includes a monthly AI allowance; you never create or paste an API key.',
+  },
+  {
+    q: 'What happens when my trial ends?',
+    a: 'Every new account starts with 14 days of Pro — no card required. If you upgrade, nothing changes. If you don’t, your account simply moves to the Free plan. If you’re holding more than Free covers, your account becomes read-only until you trim down or upgrade — everything stays readable and exportable, and nothing is ever deleted.',
+  },
+  {
+    q: 'Who owns my data? Can I leave?',
+    a: 'You do, and yes. Atomic Cloud runs the same open-source server you can host yourself. Your whole knowledge base exports as portable markdown any time, and imports straight into a self-hosted Atomic — while moving in the other direction (self-hosted to cloud) is a single command. A hosted plan should never be a hostage situation.',
+  },
+  {
+    q: 'What happens if I stop paying?',
+    a: 'Your data is never deleted for non-payment. A failed payment starts a grace period with full access; if it stays unpaid your account eventually becomes read-only, then paused — but everything is retained, and the moment payment resumes (or you export and leave) it’s all there.',
+  },
+  {
+    q: 'How is this different from running Atomic myself?',
+    a: 'Functionally it’s the same product — same app, same API, same MCP integration. Cloud removes the setup: no Docker, no server, no API keys, no backups to remember. Self-hosting remains free and fully supported; the docs cover both, and you can migrate between them.',
+  },
+  {
+    q: 'Can I use the browser extension, iOS app, and MCP with Cloud?',
+    a: 'Yes. Every client that works against a self-hosted server works against your cloud tenant: the web clipper extension, the iOS app, the REST API, and MCP for Claude, Cursor, and other agents.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+};
+---
+
+<BaseLayout
+  title="Atomic Cloud — your knowledge graph, hosted"
+  description="Hosted Atomic with AI included. Pick a subdomain, start capturing — semantic search, wiki synthesis, and agentic chat with nothing to configure. 14-day Pro trial, no card required."
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(productJsonLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 1px 1px, #1a1a1a 1px, transparent 0); background-size: 32px 32px;"></div>
+    <div class="max-w-4xl mx-auto px-6 pt-16 pb-14 md:pt-24 md:pb-20 text-center relative">
+      <p class="text-xs font-medium tracking-wide uppercase text-accent mb-4">Atomic Cloud</p>
+      <h1 class="font-display text-5xl md:text-6xl leading-[1.05] tracking-tight text-balance mb-6">
+        Your knowledge graph, <span class="italic">running in thirty seconds.</span>
+      </h1>
+      <p class="text-lg md:text-xl text-text-secondary leading-relaxed max-w-2xl mx-auto mb-10">
+        The same open-source Atomic — hosted, with AI built in. Pick a subdomain, get a magic link, start capturing. No Docker, no API keys, no backups to remember.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href={SIGNUP_URL}
+          class="inline-flex items-center gap-3 px-7 py-3.5 text-base font-medium text-white bg-accent hover:bg-accent-dark rounded-xl transition-all hover:shadow-lg hover:shadow-accent/20"
+        >
+          Start free — 14 days of Pro
+        </a>
+        <a
+          href="#pricing"
+          class="inline-flex items-center gap-2 px-5 py-3.5 text-base font-medium text-text-secondary hover:text-text-primary transition-colors"
+        >
+          See pricing
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </a>
+      </div>
+      <p class="mt-4 text-xs text-text-muted">No credit card required · your subdomain: <span class="font-mono">you.atomicapp.ai</span></p>
+    </div>
+  </section>
+
+  <!-- Why cloud -->
+  <section class="py-16 md:py-20 bg-bg-secondary">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 bg-bg-white rounded-xl border border-border-light">
+          <h3 class="font-medium text-lg mb-2">AI included</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Embeddings, auto-tagging, wiki synthesis, and chat work out of the box. Every plan includes a monthly AI allowance — you never bring an API key.
+          </p>
+        </div>
+        <div class="p-6 bg-bg-white rounded-xl border border-border-light">
+          <h3 class="font-medium text-lg mb-2">Every client, day one</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Web app, browser extension, iOS, REST API, and MCP for Claude and Cursor — all pointed at your tenant the moment it exists.
+          </p>
+        </div>
+        <div class="p-6 bg-bg-white rounded-xl border border-border-light">
+          <h3 class="font-medium text-lg mb-2">Never a hostage</h3>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Same open-source server you can host yourself. Your whole knowledge base exports as portable markdown, any time — and imports straight into a self-hosted Atomic.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-20 md:py-28">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-3">Simple pricing</h2>
+        <p class="text-text-secondary">Start free. Every new account gets 14 days of Pro — no card required.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Free -->
+        <div class="p-8 bg-bg-white rounded-2xl border border-border flex flex-col">
+          <h3 class="font-medium text-xl mb-1">Free</h3>
+          <div class="mb-6">
+            <span class="font-display text-4xl">$0</span>
+            <span class="text-text-muted text-sm">/ month</span>
+          </div>
+          <ul class="space-y-3 text-sm text-text-secondary mb-8 flex-1">
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> 250 atoms</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> 1 knowledge base</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> 100 MB storage</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> $0.50 / month of included AI</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> Semantic search, wikis, chat, canvas</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> Extension, iOS, API &amp; MCP access</li>
+          </ul>
+          <a
+            href={SIGNUP_URL}
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-text-primary bg-bg-white border border-border rounded-xl hover:border-accent/30 hover:bg-accent-subtle/50 transition-all"
+          >
+            Start free
+          </a>
+        </div>
+
+        <!-- Pro -->
+        <div class="relative p-8 bg-bg-white rounded-2xl border-2 border-accent flex flex-col shadow-lg shadow-accent/5">
+          <span class="absolute -top-3 left-8 px-2.5 py-0.5 text-xs font-medium text-white bg-accent rounded-full">14-day free trial</span>
+          <h3 class="font-medium text-xl mb-1">Pro</h3>
+          <div class="mb-6">
+            <span class="font-display text-4xl">$12</span>
+            <span class="text-text-muted text-sm">/ month</span>
+          </div>
+          <ul class="space-y-3 text-sm text-text-secondary mb-8 flex-1">
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> Unlimited atoms</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> Unlimited knowledge bases</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> 10 GB storage</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> $10 / month of included AI</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> Frontier AI models for chat &amp; reports</li>
+            <li class="flex gap-2.5"><span class="text-accent">✓</span> Everything in Free</li>
+          </ul>
+          <a
+            href={SIGNUP_URL}
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-accent hover:bg-accent-dark rounded-xl transition-all hover:shadow-lg hover:shadow-accent/20"
+          >
+            Start your trial
+          </a>
+        </div>
+      </div>
+
+      <p class="text-center text-xs text-text-muted mt-8 max-w-xl mx-auto">
+        Cancel any time from your billing page — Stripe handles payments; we never see your card. Your data is never deleted for non-payment or plan changes.
+      </p>
+    </div>
+  </section>
+
+  <!-- Own your data -->
+  <section class="py-16 md:py-20 bg-bg-secondary">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="font-display text-3xl md:text-4xl tracking-tight mb-4">The exit is part of the product</h2>
+      <p class="text-text-secondary leading-relaxed mb-8">
+        Atomic Cloud runs the <a href="https://github.com/kenforthewin/atomic" class="text-accent hover:underline">same open-source server</a> anyone can host. Your notes are yours: export the whole knowledge base as portable markdown any time and import it into a self-hosted Atomic — and moving in with <code class="text-sm bg-bg-tertiary px-1.5 py-0.5 rounded">migrate push</code> from a self-hosted server is a single command. If we ever stop earning your $12, leaving takes minutes, not months.
+      </p>
+      <a href="/cloud/migrating/" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors">
+        Read the migration guide
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-3xl mx-auto px-6">
+      <h2 class="font-display text-3xl md:text-4xl tracking-tight text-center mb-12">Questions</h2>
+      <div class="space-y-4">
+        {faqs.map(({ q, a }) => (
+          <details class="group bg-bg-white border border-border-light rounded-xl px-6 py-4 open:pb-6">
+            <summary class="cursor-pointer list-none flex items-center justify-between gap-4 text-base font-medium">
+              {q}
+              <svg class="w-4 h-4 shrink-0 text-text-muted transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <p class="mt-3 text-sm text-text-secondary leading-relaxed">{a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="pb-20 md:pb-28">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="font-display text-3xl md:text-5xl tracking-tight mb-8">
+        Thirty seconds to a second brain.
+      </h2>
+      <a
+        href={SIGNUP_URL}
+        class="inline-flex items-center gap-3 px-7 py-3.5 text-base font-medium text-white bg-accent hover:bg-accent-dark rounded-xl transition-all hover:shadow-lg hover:shadow-accent/20"
+      >
+        Create your knowledge base
+      </a>
+      <p class="mt-4 text-xs text-text-muted">
+        Prefer your own hardware? <a href="/getting-started/self-hosting/" class="underline underline-offset-2 hover:text-text-secondary transition-colors">Self-hosting is free, forever.</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

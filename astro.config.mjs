@@ -36,6 +36,16 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Atomic Cloud',
+          items: [
+            { label: 'Overview', slug: 'cloud' },
+            { label: 'Plans & Billing', slug: 'cloud/plans-and-billing' },
+            { label: 'API Tokens & MCP', slug: 'cloud/api-tokens-and-mcp' },
+            { label: 'Browser Extension', slug: 'cloud/browser-extension' },
+            { label: 'Migrating In and Out', slug: 'cloud/migrating' },
+          ],
+        },
+        {
           label: 'Core Concepts',
           items: [
             { label: 'Atoms', slug: 'concepts/atoms' },
