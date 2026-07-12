@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Terms of Service — Atomic" description="Terms of service for Atomic Cloud.">
+  <section class="max-w-3xl mx-auto px-6 py-24">
+    <h1 class="text-3xl font-bold mb-2">Terms of Service</h1>
+    <p class="text-text-secondary mb-12">Last updated: July 11, 2026</p>
+
+    <div class="space-y-8 text-text-secondary leading-relaxed">
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Overview</h2>
+        <p>
+          These terms govern your use of <strong>Atomic Cloud</strong>, the hosted service available at atomicapp.ai and its subdomains. The open-source Atomic software itself (the desktop app, server, and clients) is licensed separately under its open-source license on <a href="https://github.com/kenforthewin/atomic" class="text-accent hover:underline">GitHub</a>; these terms apply only to the hosted service. By creating an account you agree to these terms.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">The Service</h2>
+        <p>
+          Atomic Cloud provides a hosted instance of the Atomic knowledge base at a subdomain you choose, including storage of your content, AI-powered processing (embeddings, tagging, synthesis, and chat), and access via the web app, browser extension, mobile apps, API, and MCP. We may improve or modify the service over time.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Your Account</h2>
+        <p>
+          You sign in with magic links sent to your email address; you are responsible for keeping that email account, and any API tokens you create, secure. You must provide a valid email address and be legally able to enter into this agreement. One person or organization per account; you're responsible for activity under your account and tokens.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Your Content</h2>
+        <p>
+          Your notes, files, and everything you store in Atomic Cloud remain <strong>yours</strong>. You grant us only the limited rights needed to operate the service: storing your content, processing it with AI providers to power the features you use, backing it up, and transmitting it back to you and your connected clients. We claim no other license, we don't train models on your content, and we don't sell it or use it for advertising. You can export your data or migrate it to your own self-hosted server at any time.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Plans, Trials &amp; Billing</h2>
+        <p>
+          New accounts receive a limited-time trial of the paid tier at no charge and with no payment method required; when it ends, accounts move to the Free plan unless upgraded. Paid subscriptions are billed monthly in advance through Stripe and renew automatically until cancelled. You can cancel any time from your billing page; cancellation takes effect at the end of the current billing period. Plan limits (storage, item counts, and included AI allowance) are described on the <a href="/cloud/" class="text-accent hover:underline">pricing page</a> and may evolve; we'll communicate material changes to paid plans in advance.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Non-Payment &amp; Data Retention</h2>
+        <p>
+          <strong>We never delete your data for non-payment.</strong> If a payment fails, your account enters a grace period with full access, may later become read-only, and may eventually be suspended from serving — but your content is retained throughout and remains exportable. Deleting your account is the only thing that deletes your data, and only you can do it.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Acceptable Use</h2>
+        <p>
+          Don't use Atomic Cloud to store or distribute content that is illegal, infringes others' rights, or harms the service or other tenants (including attempts to breach isolation between accounts, abuse the AI allowance through automation unrelated to personal knowledge management, send spam, or host malware). We may suspend accounts that violate these rules, with notice where practical.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">AI Features</h2>
+        <p>
+          AI-generated output (tags, wiki articles, chat responses, reports) is produced by machine-learning models and can be wrong. It's assistance, not advice; you're responsible for how you use it. Your content is sent to our AI infrastructure providers solely to produce the output you request, as described in the <a href="/privacy" class="text-accent hover:underline">privacy policy</a>.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Availability &amp; Warranty Disclaimer</h2>
+        <p>
+          We work hard to keep Atomic Cloud fast, backed up, and available, but the service is provided <em>"as is"</em> without warranties of any kind, express or implied. We don't guarantee uninterrupted or error-free operation. You're encouraged to keep exports of anything critical — and we make that easy.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Limitation of Liability</h2>
+        <p>
+          To the maximum extent permitted by law, our total liability for any claim arising out of the service is limited to the amount you paid us in the twelve months before the claim, and we are not liable for indirect, incidental, special, or consequential damages, including lost profits or lost data.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Termination</h2>
+        <p>
+          You can delete your account at any time from the dashboard, which permanently deletes your content from the service (backups age out on a fixed schedule thereafter). We may terminate accounts that violate these terms. If we ever discontinue Atomic Cloud, we'll give you reasonable advance notice and time to export or migrate your data.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Changes to These Terms</h2>
+        <p>
+          We may update these terms as the service evolves. For material changes we'll notify account holders by email before the changes take effect. Continuing to use the service after that constitutes acceptance.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Contact</h2>
+        <p>
+          Questions about these terms? Reach us on <a href="https://github.com/kenforthewin/atomic" class="text-accent hover:underline">GitHub</a> or the <a href="https://discord.gg/fT4vTERhz3" class="text-accent hover:underline">community Discord</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
