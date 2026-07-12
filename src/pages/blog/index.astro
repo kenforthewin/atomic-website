@@ -13,7 +13,7 @@ const posts = (await getCollection('blog'))
     <p class="text-text-secondary text-lg mb-12">Updates, releases, and the thinking behind Atomic.</p>
 
     {posts.length === 0 ? (
-      <p class="text-text-muted italic">No posts yet. Check back soon.</p>
+      <p class="text-text-muted">No posts yet. Check back soon.</p>
     ) : (
       <div class="space-y-8">
         {posts.map(post => (
