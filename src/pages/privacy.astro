@@ -5,7 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout title="Privacy Policy — Atomic" description="Privacy policy for the Atomic app and Atomic Cloud.">
   <section class="max-w-3xl mx-auto px-6 py-24">
     <h1 class="text-3xl font-bold mb-2">Privacy Policy</h1>
-    <p class="text-text-secondary mb-12">Last updated: July 11, 2026</p>
+    <p class="text-text-secondary mb-12">Last updated: July 19, 2026</p>
 
     <div class="space-y-8 text-text-secondary leading-relaxed">
       <div>
@@ -25,35 +25,70 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div>
         <h2 class="text-xl font-semibold text-text-primary mb-3">Atomic Cloud — What We Store</h2>
         <p>
-          When you create an Atomic Cloud account we store your email address (used for magic-link sign-in and service emails), your chosen subdomain, and the content you put into your knowledge base: notes, files, tags, and the derived data that powers Atomic's features (embeddings, generated wiki articles, chat history). Content is stored on encrypted volumes, in an isolated database per account, and backed up on a fixed schedule.
+          When you create an Atomic Cloud account we store your email address (used for magic-link sign-in and service emails), your chosen subdomain, and the content you put into your knowledge base: notes, files, tags, and the derived data that powers Atomic's features (embeddings, generated wiki articles, chat history). Content is stored on encrypted volumes, in an isolated database per account, and backed up nightly; backups are retained for 30 days on encrypted object storage.
         </p>
       </div>
 
       <div>
         <h2 class="text-xl font-semibold text-text-primary mb-3">Atomic Cloud — Service Providers</h2>
         <p>
-          We use a small set of processors to operate the service, each receiving only what its job requires: <strong>DigitalOcean</strong> (infrastructure hosting), <strong>OpenRouter</strong> (AI processing — your content is sent to produce the embeddings, tags, summaries, and chat responses you request, and is not used to train models), <strong>Stripe</strong> (payments — we never see or store your card details), <strong>Mailgun</strong> (transactional email, e.g. magic links and billing notices), and <strong>Cloudflare</strong> (this website and backup storage). We do not sell your data, share it with advertisers, or use it for any purpose other than providing the service.
+          We use a small set of processors to operate the service, each receiving only what its job requires: <strong>DigitalOcean</strong> (infrastructure hosting), <strong>OpenRouter</strong> (AI processing — your content is sent to produce the embeddings, tags, summaries, and chat responses you request, routed to the model providers behind your selected models, e.g. Anthropic or OpenAI; our account settings exclude providers that train on API inputs). If you bring your own API key instead, your content goes to your chosen provider under your own agreement with them, <strong>Stripe</strong> (payments — we never see or store your card details), <strong>Mailgun</strong> (transactional email, e.g. magic links and billing notices), and <strong>Cloudflare</strong> (this website and backup storage). We do not sell your data, share it with advertisers, or use it for any purpose other than providing the service.
         </p>
       </div>
 
       <div>
         <h2 class="text-xl font-semibold text-text-primary mb-3">Atomic Cloud — Your Control</h2>
         <p>
-          You can export your data or migrate your entire knowledge base to a self-hosted server at any time. Deleting your account permanently removes your content from the service, with backups aging out on a fixed schedule afterward. Your data is never deleted for non-payment.
+          You can export your data or migrate your entire knowledge base to a self-hosted server at any time. Deleting your account permanently removes your content from the service immediately; a final backup is retained for 30 days (so we can recover you from an accidental or malicious deletion) and then ages out with the rest. Your subdomain is reserved for 90 days after deletion so a newcomer can't immediately impersonate your old address. Your data is never deleted for non-payment.
         </p>
       </div>
 
       <div>
         <h2 class="text-xl font-semibold text-text-primary mb-3">Analytics &amp; Tracking</h2>
         <p>
-          Neither the Atomic apps nor this website include third-party analytics, advertising, or tracking frameworks. Atomic Cloud keeps ordinary server logs (for security and reliability) that age out on a fixed schedule.
+          Neither the Atomic apps nor this website include third-party analytics, advertising, or tracking frameworks. Atomic Cloud keeps ordinary server logs (for security and reliability) that are size-capped and rotate automatically. Signing in sets a single session cookie, used only to keep you signed in — there are no third-party or advertising cookies, so no cookie banner is needed or shown.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Where Your Data Lives</h2>
+        <p>
+          Atomic Cloud is hosted in the United States (New York). If you use the service from elsewhere — including the EEA, UK, or Australia — your content is transferred to and processed in the US as described in this policy. Our processors publish their own compliance and transfer commitments (DigitalOcean, Stripe, Cloudflare, Mailgun, and OpenRouter each maintain GDPR programs).
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Your Rights</h2>
+        <p>
+          Wherever you live, we extend the same rights to everyone: you can access and export everything we hold for you (the export and migration tools produce a complete copy), correct it (it's your knowledge base — edit anything), delete it (account deletion is self-serve and complete, as described above), and take it elsewhere (exports are in open formats; migration to self-hosted Atomic is a first-class feature). For anything you can't do from the dashboard, contact us and we'll handle it promptly.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">The Demo Instance</h2>
+        <p>
+          demo.atomicapp.ai is a public, read-only showcase populated with published research papers. It has no user accounts, sets no cookies, and accepts no user content. Standard rate-limiting logs apply.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Children</h2>
+        <p>
+          Atomic Cloud is not directed at children and is not intended for anyone under 13 (or the age of digital consent where you live).
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-text-primary mb-3">Security Incidents</h2>
+        <p>
+          If we ever discover a breach affecting your data, we will notify you by email promptly and describe what happened, what was affected, and what we're doing about it.
         </p>
       </div>
 
       <div>
         <h2 class="text-xl font-semibold text-text-primary mb-3">Contact</h2>
         <p>
-          If you have questions about this privacy policy, please open an issue on <a href="https://github.com/kenforthewin/atomic" class="text-accent hover:underline">GitHub</a> or ask in the <a href="https://discord.gg/fT4vTERhz3" class="text-accent hover:underline">community Discord</a>.
+          For privacy questions or requests, email <a href="mailto:privacy@atomicapp.ai" class="text-accent hover:underline">privacy@atomicapp.ai</a>. You can also open an issue on <a href="https://github.com/kenforthewin/atomic" class="text-accent hover:underline">GitHub</a> or ask in the <a href="https://discord.gg/fT4vTERhz3" class="text-accent hover:underline">community Discord</a> for anything non-sensitive.
         </p>
       </div>
     </div>
